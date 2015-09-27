@@ -1,0 +1,11 @@
+BeanWrapper
+Association
+PersistentProperty
+PersistentEntity
+ResourceMappings
+EmbeddedWrappers
+Repositories
+RepositoryEntityLinks
+PersistentEntityProjector
+
+PersistentEntityResource返回是，在tojson之前。

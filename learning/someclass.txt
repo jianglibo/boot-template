@@ -9,3 +9,7 @@ RepositoryEntityLinks
 PersistentEntityProjector
 
 PersistentEntityResource返回是，在tojson之前。
+
+ResourceMetadataHandlerMethodArgumentResolver 参数转换类RootResourceInformation.
+
+RepositoryRestMvcConfiguration总配置文件，集成覆盖需要的配置config开头

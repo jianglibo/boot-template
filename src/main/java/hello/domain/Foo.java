@@ -11,6 +11,12 @@ public class Foo extends BaseEntity {
      */
     private static final long serialVersionUID = 1L;
     
+    public Foo(){}
+    
+    public Foo(String name) {
+        setName(name);
+    }
+    
     private String name;
 
     public String getName() {

@@ -18,12 +18,12 @@ import hello.domain.BootUser;
  *         2015年9月28日
  *
  */
-public class PersonRepositoryImpl extends SimpleJpaRepository<BootUser, Long> {
+public class BootUserRepositoryImpl extends SimpleJpaRepository<BootUser, Long> implements BootUserRepositoryCustom {
 
 	private final JpaEntityInformation<BootUser, ?> entityInformation;
     
     @Autowired
-    public PersonRepositoryImpl(EntityManager entityManager) {
+    public BootUserRepositoryImpl(EntityManager entityManager) {
         super(BootUser.class, entityManager);
         this.entityInformation = JpaEntityInformationSupport.getMetadata(BootUser.class, entityManager);
     }

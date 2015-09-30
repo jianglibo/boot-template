@@ -12,7 +12,7 @@ import hello.domain.BootUser;
 
 
 @RepositoryRestResource(collectionResourceRel = "people", path = "people")
-public interface PersonRepository extends JpaRepository<BootUser, Long>, JpaSpecificationExecutor<BootUser> {
+public interface BootUserRepository extends JpaRepository<BootUser, Long>, JpaSpecificationExecutor<BootUser> {
 
     BootUser findByEmail(@Param("email") String email);
 

@@ -18,17 +18,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.session.ChangeSessionIdAuthenticationStrategy;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import hello.config.userdetail.BootUserManager;
+import hello.config.userdetail.BootUserManagerConfigurer;
+
 
 /**
- * 1、如果标注了@Configuration和@EnableWebSecurity，那么就关闭了spring-boot的web安全的设置
- * 2、可以提供自己的AuthenticationManager，那么默认的就不会创建，同时你有了完全的设置控制
- * 3、在WebSecurityConfigurerAdapter的继承类中，标注@Configuration，同时@Autowired.
- * 4、继承GlobalAuthenticationConfigurerAdapter，同时override init方法。（If you experience instantiation issues）
- * 。
  * 
- * @author jianglibo
+ * @author jianglibo@gmail.com
+ *         2015年9月29日
  *
- *         2015年4月22日-上午10:44:07
  */
 @Configuration
 @EnableWebSecurity
@@ -43,6 +41,9 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
     @Value("${spring.data.rest.base-uri}")
     private String apiPrefix;
 
+    
+    @Autowired
+    private BootUserManager bootUserManager;
     /**
      * disable default. then read father class's gethttp method. write all config your self.
      */
@@ -60,13 +61,10 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // @formatter:off
-        
+        BootUserManagerConfigurer<AuthenticationManagerBuilder> pc = auth.apply(new BootUserManagerConfigurer<AuthenticationManagerBuilder>(bootUserManager)).passwordEncoder(passwordEncoder);
         // @formatter:on
     };
 
-    /**
-     * 是formLogin()产生了这个配置，那么除去formLogin，然后按照formLogin编写自己的配置就可以了。
-     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off

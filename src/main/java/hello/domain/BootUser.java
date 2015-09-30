@@ -5,12 +5,14 @@ import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -19,6 +21,8 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Sets;
+
+import hello.vo.BootUserVo;
 
 @Entity
 @Table(name = "bootuser", uniqueConstraints = { @UniqueConstraint(columnNames = "name"), @UniqueConstraint(columnNames = "email"),
@@ -40,6 +44,9 @@ public class BootUser extends BaseEntity {
     
     @Enumerated(EnumType.STRING)
     private Gender gender = Gender.FEMALE;
+    
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "bootUser", cascade = CascadeType.REMOVE)
+    private Set<ThirdPartLogin> thirdConns = Sets.newHashSet();
     
     @NotNull
     @Column(nullable = false)
@@ -83,6 +90,26 @@ public class BootUser extends BaseEntity {
     }
 
     
+    /**
+     * @param bootUserVo
+     * @param encodedPwd
+     */
+    public BootUser(BootUserVo bootUserVo, String encodedPwd) {
+        setName(bootUserVo.getUsername());
+        setDisplayName(bootUserVo.getDisplayName());
+        setAvatar(bootUserVo.getAvatar());
+        setEmail(bootUserVo.getEmail());
+        setMobile(bootUserVo.getMobile());
+        setPassword(encodedPwd);
+        setAccountNonExpired(bootUserVo.isAccountNonExpired());
+        setAccountNonLocked(bootUserVo.isAccountNonLocked());
+        setCredentialsNonExpired(bootUserVo.isCredentialsNonExpired());
+        setEnabled(bootUserVo.isEnabled());
+        setCreatedAt(new Date());
+        setEmailVerified(bootUserVo.isEmailVerified());
+        setMobileVerified(bootUserVo.isMobileVerified());
+    }
+
     @PrePersist
     public void beforePersist() {
         setOpenId(UUID.randomUUID().toString().replaceAll("-", ""));
@@ -208,6 +235,14 @@ public class BootUser extends BaseEntity {
         this.gender = gender;
     }
 
+    public Set<ThirdPartLogin> getThirdConns() {
+        return thirdConns;
+    }
+
+    public void setThirdConns(Set<ThirdPartLogin> thirdConns) {
+        this.thirdConns = thirdConns;
+    }
+    
     public static enum Gender {
         MALE, FEMALE
     }

@@ -31,10 +31,10 @@ import hello.domain.projection.FooSimple;
  *
  */
 public class TestProjectionJson {
-    
+
     public static class FooWrapper {
         private Foo f;
-        
+
         public FooWrapper(Foo f) {
             this.f = f;
         }
@@ -46,18 +46,26 @@ public class TestProjectionJson {
         public void setF(Foo f) {
             this.f = f;
         }
-        
+
     }
 
     @Test
     public void t() throws JsonProcessingException {
         ObjectMapper om = new ObjectMapper();
-        om.registerModule(new Pmodule());
         
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(new FooSerializer());
+        
+//        om.registerModule(module);
+        
+        om.registerModule(new Pmodule());
+
         FooWrapper fw = new FooWrapper(new Foo("abc"));
         
-        String jn = om.writeValueAsString(fw);
-        
+        Foo foo = new Foo("abc"); 
+
+        String jn = om.writeValueAsString(foo);
+
         System.out.println(jn);
     }
 
@@ -79,7 +87,7 @@ public class TestProjectionJson {
          * 
          */
         public Pmodule() {
-            super(new Version(1, 0, 0, null, "hello", "jackson-module"));
+            super(new Version(1, 0, 0, null, "hello", "jackson-module-mine"));
         }
 
         /*
@@ -89,56 +97,31 @@ public class TestProjectionJson {
          */
         @Override
         public void setupModule(SetupContext context) {
+            addSerializer(new FooSerializer());
             super.setupModule(context);
-            addSerializer(Foo.class, new FooSerializer());
         }
 
-        private static class FooSerializer extends StdSerializer<Foo> {
+    }
 
-            private boolean unwrapping;
+    public static class FooSerializer extends StdSerializer<Foo> {
 
-            /**
-             * @param t
-             */
-            protected FooSerializer() {
-                super(Foo.class);
-            }
+        /**
+         * @param t
+         */
+        public FooSerializer() {
+            super(Foo.class);
+        }
 
-            /*
-             * (non-Javadoc)
-             * 
-             * @see com.fasterxml.jackson.databind.ser.std.StdSerializer#serialize(java.lang.Object, com.fasterxml.jackson.core.JsonGenerator,
-             * com.fasterxml.jackson.databind.SerializerProvider)
-             */
-            @Override
-            public void serialize(Foo value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonGenerationException {
-                provider.//
-                        findValueSerializer(FooSimple.class, null).//
-                        unwrappingSerializer(null).//
-                        serialize(value, jgen, provider);
-            }
-
-            /*
-             * (non-Javadoc)
-             * 
-             * @see com.fasterxml.jackson.databind.JsonSerializer#isUnwrappingSerializer()
-             */
-            @Override
-            public boolean isUnwrappingSerializer() {
-                return unwrapping;
-            }
-
-            /*
-             * (non-Javadoc)
-             * 
-             * @see com.fasterxml.jackson.databind.JsonSerializer#unwrappingSerializer(com.fasterxml.jackson.databind.util.NameTransformer)
-             */
-            @Override
-            public JsonSerializer<Foo> unwrappingSerializer(NameTransformer unwrapper) {
-
-                this.unwrapping = true;
-                return this;
-            }
+        /*
+         * (non-Javadoc)
+         * 
+         * @see com.fasterxml.jackson.databind.ser.std.StdSerializer#serialize(java.lang.Object, com.fasterxml.jackson.core.JsonGenerator,
+         * com.fasterxml.jackson.databind.SerializerProvider)
+         */
+        @Override
+        public void serialize(Foo value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonGenerationException {
+            JsonSerializer js = provider.findValueSerializer(FooSimple.class, null);//.unwrappingSerializer(null);
+            js.serialize(value, jgen, provider);
         }
     }
 }

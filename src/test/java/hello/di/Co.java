@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Hangzhou NetFrog Inc.
+ * 2016 jianglibo@gmail.com
  *
  */
 package hello.di;

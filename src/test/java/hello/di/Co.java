@@ -6,6 +6,7 @@ package hello.di;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,9 +14,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class Co {
     
-    @Bean(name="rom")
-    @Qualifier(value="rom")
-    public ObjectMapper om() {
+    @Bean(name="romx")
+    @Qualifier(value="romx")
+    @Primary
+    public ObjectMapper omx() {
         return new ObjectMapper();
     }
 

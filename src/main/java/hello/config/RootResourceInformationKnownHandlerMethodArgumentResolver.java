@@ -7,8 +7,6 @@ package hello.config;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.support.Repositories;
-import org.springframework.data.rest.core.invoke.RepositoryInvoker;
-import org.springframework.data.rest.core.invoke.RepositoryInvokerFactory;
 import org.springframework.data.rest.core.mapping.ResourceMetadata;
 import org.springframework.data.rest.webmvc.config.ResourceMetadataHandlerMethodArgumentResolver;
 import org.springframework.data.rest.webmvc.config.RootResourceInformationHandlerMethodArgumentResolver;
@@ -24,10 +22,10 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  *         2015年9月28日
  *
  */
-public class RootResourceInformationKnownHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
+public class RootResourceInformationKnownHandlerMethodArgumentResolver /* implements HandlerMethodArgumentResolver*/ {
 
     private final Repositories repositories;
-    private final RepositoryInvokerFactory invokerFactory;
+//    private final RepositoryInvokerFactory invokerFactory;
     private final ResourceMetadataHandlerMethodArgumentResolver resourceMetadataResolver;
 
     /**
@@ -39,14 +37,14 @@ public class RootResourceInformationKnownHandlerMethodArgumentResolver implement
      * @param resourceMetadataResolver must not be {@literal null}.
      */
     public RootResourceInformationKnownHandlerMethodArgumentResolver(Repositories repositories,
-            RepositoryInvokerFactory invokerFactory, ResourceMetadataHandlerMethodArgumentResolver resourceMetadataResolver) {
+            /*RepositoryInvokerFactory invokerFactory,*/ ResourceMetadataHandlerMethodArgumentResolver resourceMetadataResolver) {
 
         Assert.notNull(repositories, "Repositories must not be null!");
-        Assert.notNull(invokerFactory, "invokerFactory must not be null!");
+//        Assert.notNull(invokerFactory, "invokerFactory must not be null!");
         Assert.notNull(resourceMetadataResolver, "ResourceMetadataHandlerMethodArgumentResolver must not be null!");
 
         this.repositories = repositories;
-        this.invokerFactory = invokerFactory;
+//        this.invokerFactory = invokerFactory;
         this.resourceMetadataResolver = resourceMetadataResolver;
     }
 
@@ -54,7 +52,7 @@ public class RootResourceInformationKnownHandlerMethodArgumentResolver implement
      * (non-Javadoc)
      * @see org.springframework.web.method.support.HandlerMethodArgumentResolver#supportsParameter(org.springframework.core.MethodParameter)
      */
-    @Override
+//    @Override
     public boolean supportsParameter(MethodParameter parameter) {
         boolean b = RootResourceInformationKnown.class.equals(parameter.getParameterType());
         return b;
@@ -64,7 +62,7 @@ public class RootResourceInformationKnownHandlerMethodArgumentResolver implement
      * (non-Javadoc)
      * @see org.springframework.web.method.support.HandlerMethodArgumentResolver#resolveArgument(org.springframework.core.MethodParameter, org.springframework.web.method.support.ModelAndViewContainer, org.springframework.web.context.request.NativeWebRequest, org.springframework.web.bind.support.WebDataBinderFactory)
      */
-    @Override
+//    @Override
     public RootResourceInformationKnown resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 
@@ -72,11 +70,12 @@ public class RootResourceInformationKnownHandlerMethodArgumentResolver implement
                 binderFactory);
 
         Class<?> domainType = resourceMetadata.getDomainType();
-        RepositoryInvoker repositoryInvoker = invokerFactory.getInvokerFor(domainType);
+//        RepositoryInvoker repositoryInvoker = invokerFactory.getInvokerFor(domainType);
         PersistentEntity<?, ?> persistentEntity = repositories.getPersistentEntity(domainType);
 
         // TODO reject if ResourceMetadata cannot be resolved
-        return new RootResourceInformationKnown(resourceMetadata, persistentEntity, repositoryInvoker);
+//        return new RootResourceInformationKnown(resourceMetadata, persistentEntity, repositoryInvoker);
+        return null;
     }
 }
 

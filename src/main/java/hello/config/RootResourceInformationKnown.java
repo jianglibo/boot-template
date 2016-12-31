@@ -5,7 +5,6 @@
 package hello.config;
 
 import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.rest.core.invoke.RepositoryInvoker;
 import org.springframework.data.rest.core.mapping.ResourceMetadata;
 import org.springframework.data.rest.webmvc.RootResourceInformation;
 
@@ -14,15 +13,15 @@ import org.springframework.data.rest.webmvc.RootResourceInformation;
  *         2015年9月28日
  *
  */
-public class RootResourceInformationKnown extends RootResourceInformation {
+public class RootResourceInformationKnown /* extends RootResourceInformation*/ {
 
     /**
      * @param metadata
      * @param entity
      * @param invoker
      */
-    public RootResourceInformationKnown(ResourceMetadata metadata, PersistentEntity<?, ?> entity, RepositoryInvoker invoker) {
-        super(metadata, entity, invoker);
+    public RootResourceInformationKnown(ResourceMetadata metadata, PersistentEntity<?, ?> entity/*, RepositoryInvoker invoker*/) {
+//        super(metadata, entity, invoker);
     }
     
 //    private RootResourceInformation rri;

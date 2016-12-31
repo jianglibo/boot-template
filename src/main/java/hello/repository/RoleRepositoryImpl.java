@@ -20,12 +20,12 @@ import hello.domain.Role;
  */
 public class RoleRepositoryImpl extends SimpleJpaRepository<Role, Long>{
 
-	private final JpaEntityInformation<Role, ?> entityInformation;
+//	private final JpaEntityInformation<Role, ?> entityInformation;
     
     @Autowired
     public RoleRepositoryImpl(EntityManager entityManager) {
         super(Role.class, entityManager);
-        this.entityInformation = JpaEntityInformationSupport.getMetadata(Role.class, entityManager);
+//        this.entityInformation = JpaEntityInformationSupport.getMetadata(Role.class, entityManager);
     }
 
 }

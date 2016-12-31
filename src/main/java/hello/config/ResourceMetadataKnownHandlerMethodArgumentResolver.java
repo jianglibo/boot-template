@@ -25,7 +25,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  *         2015年9月28日
  *
  */
-public class ResourceMetadataKnownHandlerMethodArgumentResolver extends ResourceMetadataHandlerMethodArgumentResolver{
+public class ResourceMetadataKnownHandlerMethodArgumentResolver /* extends ResourceMetadataHandlerMethodArgumentResolver */{
     
     private static final Pattern ptn = Pattern.compile("/([^/]+)");
 
@@ -39,7 +39,7 @@ public class ResourceMetadataKnownHandlerMethodArgumentResolver extends Resource
      * @param baseUri
      */
     public ResourceMetadataKnownHandlerMethodArgumentResolver(Repositories repositories, ResourceMappings mappings, BaseUri baseUri) {
-        super(repositories, mappings, baseUri);
+//        super(repositories, mappings, baseUri);
 		this.repositories = repositories;
 		this.mappings = mappings;
 		this.baseUri = baseUri;
@@ -48,7 +48,7 @@ public class ResourceMetadataKnownHandlerMethodArgumentResolver extends Resource
     /* (non-Javadoc)
      * @see org.springframework.data.rest.webmvc.config.ResourceMetadataHandlerMethodArgumentResolver#resolveArgument(org.springframework.core.MethodParameter, org.springframework.web.method.support.ModelAndViewContainer, org.springframework.web.context.request.NativeWebRequest, org.springframework.web.bind.support.WebDataBinderFactory)
      */
-    @Override
+//    @Override
     public ResourceMetadata resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest,
             WebDataBinderFactory binderFactory) throws Exception {
         String lookupPath = baseUri.getRepositoryLookupPath(webRequest);
@@ -68,12 +68,12 @@ public class ResourceMetadataKnownHandlerMethodArgumentResolver extends Resource
             return null;
         }
 
-        for (Class<?> domainType : repositories) {
-            ResourceMetadata mapping = mappings.getMappingFor(domainType);
-            if (mapping.getPath().matches(repositoryKey) && mapping.isExported()) {
-                return mapping;
-            }
-        }
+//        for (Class<?> domainType : repositories) {
+//            ResourceMetadata mapping = mappings.getMappingFor(domainType);
+//            if (mapping.getPath().matches(repositoryKey) && mapping.isExported()) {
+//                return mapping;
+//            }
+//        }
 
         throw new IllegalArgumentException(String.format("Could not resolve repository metadata for %s.", repositoryKey));
 

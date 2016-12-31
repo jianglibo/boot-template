@@ -12,13 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.rest.core.invoke.RepositoryInvoker;
 import org.springframework.data.rest.core.mapping.ResourceMetadata;
 import org.springframework.data.rest.core.mapping.SearchResourceMappings;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.data.rest.webmvc.ResourceType;
 import org.springframework.data.rest.webmvc.support.DefaultedPageable;
 import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -69,42 +67,43 @@ public class FooController extends ShRestControllerBase {
     }
 
 	@ResponseBody
-	@RequestMapping(value = "/foos", method = RequestMethod.GET)
+	@RequestMapping(value = "/foosxx", method = RequestMethod.GET)
 	public Resources<?> getCollectionResource(final RootResourceInformationKnown resourceInformation,
 			DefaultedPageable pageable, Sort sort, PersistentEntityResourceAssembler assembler)
 			throws ResourceNotFoundException, HttpRequestMethodNotSupportedException {
 
-		resourceInformation.verifySupportedMethod(HttpMethod.GET, ResourceType.COLLECTION);
-
-		RepositoryInvoker invoker = resourceInformation.getInvoker();
-
-		if (null == invoker) {
-			throw new ResourceNotFoundException();
-		}
-
-		Iterable<?> results;
-
-		if (pageable.getPageable() != null) {
-			results = invoker.invokeFindAll(pageable.getPageable());
-		} else {
-			results = invoker.invokeFindAll(sort);
-		}
-
-		ResourceMetadata metadata = resourceInformation.getResourceMetadata();
-		SearchResourceMappings searchMappings = metadata.getSearchResourceMappings();
-		List<Link> links = new ArrayList<Link>();
-
-		if (searchMappings.isExported()) {
-			links.add(entityLinks.linkFor(metadata.getDomainType()).slash(searchMappings.getPath())
-					.withRel(searchMappings.getRel()));
-		}
-
-		Link baseLink = entityLinks.linkToPagedResource(resourceInformation.getDomainType(), pageable.isDefault() ? null
-				: pageable.getPageable());
-
-		Resources<?> resources = resultToResources(results, assembler, baseLink);
-		resources.add(links);
-		return resources;
+//		resourceInformation.verifySupportedMethod(HttpMethod.GET, org.springframework.data.rest.core.mapping.COLLECTION);
+//
+//		RepositoryInvoker invoker = resourceInformation.getInvoker();
+//
+//		if (null == invoker) {
+//			throw new ResourceNotFoundException();
+//		}
+//
+//		Iterable<?> results;
+//
+//		if (pageable.getPageable() != null) {
+//			results = invoker.invokeFindAll(pageable.getPageable());
+//		} else {
+//			results = invoker.invokeFindAll(sort);
+//		}
+//
+//		ResourceMetadata metadata = resourceInformation.getResourceMetadata();
+//		SearchResourceMappings searchMappings = metadata.getSearchResourceMappings();
+//		List<Link> links = new ArrayList<Link>();
+//
+//		if (searchMappings.isExported()) {
+//			links.add(entityLinks.linkFor(metadata.getDomainType()).slash(searchMappings.getPath())
+//					.withRel(searchMappings.getRel()));
+//		}
+//
+//		Link baseLink = entityLinks.linkToPagedResource(resourceInformation.getDomainType(), pageable.isDefault() ? null
+//				: pageable.getPageable());
+//
+//		Resources<?> resources = resultToResources(results, assembler, baseLink);
+//		resources.add(links);
+//		return resources;
+		return null;
 	}
 
 }

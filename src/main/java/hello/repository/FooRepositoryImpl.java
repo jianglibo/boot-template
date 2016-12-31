@@ -21,12 +21,12 @@ import hello.domain.Foo;
  */
 public class FooRepositoryImpl extends SimpleJpaRepository<Foo, Long> implements FooRepositoryCustom {
 
-	private final JpaEntityInformation<Foo, ?> entityInformation;
+//	private final JpaEntityInformation<Foo, ?> entityInformation;
     
     @Autowired
     public FooRepositoryImpl(EntityManager entityManager) {
         super(Foo.class, entityManager);
-        this.entityInformation = JpaEntityInformationSupport.getMetadata(Foo.class, entityManager);
+//        this.entityInformation = JpaEntityInformationSupport.getMetadata(Foo.class, entityManager);
     }
     
     /* (non-Javadoc)

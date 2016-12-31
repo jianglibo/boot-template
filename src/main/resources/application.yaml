@@ -17,13 +17,14 @@ spring:
     jpa:
         database: H2
         show-sql: true
-        hibernate:
-            ddl-auto: update
-            naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-            dialect: org.hibernate.dialect.H2Dialect
+        generate-ddl: true
+#        hibernate:
+#            ddl-auto: update
+#            naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+#            dialect: org.hibernate.dialect.H2Dialect
     data:
         rest:
-            base-uri: /api/v1
+            base-path: /api/v1
     thymeleaf:
         cache: false
         prefix: classpath:/templates/

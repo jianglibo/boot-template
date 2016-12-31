@@ -47,7 +47,7 @@ public class FooController extends ShRestControllerBase {
     @Autowired
     private FooRepository fooRepo;
 
-    @Value("${spring.data.rest.base-uri}")
+    @Value("${spring.data.rest.base-path}")
     private String apiPrefix;
 
     /**

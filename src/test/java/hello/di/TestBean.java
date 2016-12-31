@@ -19,10 +19,10 @@ public class TestBean extends Tbase{
     private ObjectMapper objectMapper;
     
     @Autowired
-    @Qualifier(value="rom")
+    @Qualifier(value="romx")
     private ObjectMapper om2;
     
-    @Resource(name="rom")
+    @Resource(name="romx")
     private ObjectMapper om3;
     
     @Test

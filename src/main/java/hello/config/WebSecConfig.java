@@ -38,8 +38,8 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Value("${spring.data.rest.base-uri}")
-    private String apiPrefix;
+    @Value("${spring.data.rest.base-path}")
+    private String basePath;
 
     
     @Autowired
@@ -69,8 +69,9 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off
         http.authorizeRequests()
-            .antMatchers(apiPrefix + "/**").permitAll()
-            .anyRequest().fullyAuthenticated()
+            .antMatchers(basePath + "/**").permitAll()
+//            .anyRequest().fullyAuthenticated()
+            .anyRequest().permitAll()
             .and()
             .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
     }

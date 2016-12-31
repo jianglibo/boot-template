@@ -16,6 +16,8 @@ buildscript {
     }
 }
 
+ext['thymeleaf.version'] = '3.0.2.RELEASE'
+ext['thymeleaf-layout-dialect.version'] = '2.1.1'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -73,7 +75,12 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     // end::actuator[]
     compile("org.springframework.boot:spring-boot-starter-data-rest")
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa") {
+    	exclude group: "org.hibernate", module: "hibernate-entitymanager"
+    }
+    
+    compile("org.eclipse.persistence:org.eclipse.persistence.jpa:2.6.4")
+    
     compile("org.springframework.boot:spring-boot-starter-jdbc")
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -85,6 +92,8 @@ dependencies {
   	compile("org.apache.httpcomponents:fluent-hc:4.5")
   	// https://mvnrepository.com/artifact/com.google.guava/guava
 	compile group: 'com.google.guava', name: 'guava', version: '19.0'
+	
+	compile 'org.springframework.data:spring-data-rest-hal-browser'
   	
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.springframework.security:spring-security-test:4.2.1.RELEASE")

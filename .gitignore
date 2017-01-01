@@ -6,6 +6,7 @@ gradle.properties
 **/.project
 .settings/
 
+**/bower_components/*
 
 .gradle
 build/

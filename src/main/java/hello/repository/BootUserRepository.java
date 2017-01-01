@@ -19,7 +19,7 @@ public interface BootUserRepository extends JpaRepository<BootUser, Long>, JpaSp
     BootUser findByMobile(@Param("mobile") String mobile);
 
     BootUser findByName(@Param("name") String name);
-
+    
     @Override
     @RestResource(exported = false)
     @Transactional

@@ -1,7 +1,6 @@
 package hello.config.userdetail;
 
 import java.util.Set;
-import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -23,12 +22,12 @@ import hello.domain.BootUser;
 import hello.domain.Role;
 import hello.repository.BootUserRepository;
 import hello.repository.RoleRepository;
-import hello.util.OneTwo;
+import hello.util.PairForStream;
 import hello.vo.BootUserVo;
 
 
 @Component
-public class BootUserManager implements UserDetailsManager {
+public class BootUserDetailManager implements UserDetailsManager {
 	
 	private static final String ROLE_PREFIX = "ROLE_";
 	
@@ -36,9 +35,9 @@ public class BootUserManager implements UserDetailsManager {
     
     private static Pattern mobilePtn = Pattern.compile("^[0-9+-]+$");
     
-    private static Logger logger = LoggerFactory.getLogger(BootUserManager.class);
+    private static Logger logger = LoggerFactory.getLogger(BootUserDetailManager.class);
     
-    private BootUserRepository personRepo;
+    private BootUserRepository userRepo;
     
     private RoleRepository roleRepo;
     
@@ -49,8 +48,8 @@ public class BootUserManager implements UserDetailsManager {
     private PasswordEncoder passwordEncoder;
     
     @Autowired
-    public BootUserManager(BootUserRepository personRepo, RoleRepository roleRepo) {
-        this.personRepo = personRepo;
+    public BootUserDetailManager(BootUserRepository userRepo, RoleRepository roleRepo) {
+        this.userRepo = userRepo;
         this.roleRepo = roleRepo;
     }
 
@@ -59,11 +58,11 @@ public class BootUserManager implements UserDetailsManager {
         BootUser person;
         
         if (emailOrMobile.indexOf('@') != -1) {
-            person = personRepo.findByEmail(emailOrMobile);
+            person = userRepo.findByEmail(emailOrMobile);
         } else if(mobilePtn.matcher(emailOrMobile).find()) {
-            person = personRepo.findByMobile(emailOrMobile);
+            person = userRepo.findByMobile(emailOrMobile);
         } else {
-            person = personRepo.findByName(emailOrMobile); 
+            person = userRepo.findByName(emailOrMobile); 
         }
         if (person == null) {
             throw new UsernameNotFoundException(emailOrMobile);
@@ -72,20 +71,20 @@ public class BootUserManager implements UserDetailsManager {
     }
 
     @Override
-    public void createUser(UserDetails user) {
-       BootUserVo bootUserVo = (BootUserVo) user;
+    public void createUser(UserDetails bootUserVo) {
+       BootUserVo bootUserVoLocal = (BootUserVo) bootUserVo;
        
       // @formatter:off
-       Set<Role> roleset = bootUserVo.getAuthorities().stream()
+       Set<Role> roleset = bootUserVoLocal.getAuthorities().stream()
     		   .map(ga -> ga.getAuthority())
     		   .map(gn -> gn.startsWith(ROLE_PREFIX) ? gn : ROLE_PREFIX + gn)
-    		   .map(rn -> new OneTwo<String, Role>(rn, roleRepo.findByName(rn)))
+    		   .map(rn -> new PairForStream<String, Role>(rn, roleRepo.findByName(rn)))
     		   .map(ot -> {
-    			   if (ot.getTwo() == null ) {
-    				   Role r = new Role(ot.getOne());
+    			   if (ot.getSecond() == null ) {
+    				   Role r = new Role(ot.getFirst());
     				   return roleRepo.save(r);
     			   } else {
-    				   return ot.getTwo();
+    				   return ot.getSecond();
     			   }
     		   }).collect(Collectors.toSet());
        // @formatter:on
@@ -94,12 +93,9 @@ public class BootUserManager implements UserDetailsManager {
 		   roleset.add(getOrCreateDefaultRole());
 	   }
        
-       BootUser person = new BootUser(bootUserVo, passwordEncoder.encode(bootUserVo.getPassword()));
-       person.getRoles().addAll(roleset);
-       if (person.getName() == null) {
-           person.setName(UUID.randomUUID().toString().replaceAll("-", ""));
-       }
-       personRepo.save(person);
+       BootUser bootUser = new BootUser(bootUserVoLocal, passwordEncoder.encode(bootUserVoLocal.getPassword()));
+       bootUser.getRoles().addAll(roleset);
+       userRepo.save(bootUser);
     }
     
     private Role getOrCreateDefaultRole() {
@@ -119,8 +115,8 @@ public class BootUserManager implements UserDetailsManager {
 
     @Override
     public void deleteUser(String username) {
-        // TODO Auto-generated method stub
-        
+    	BootUser bootUser = userRepo.findByName(username);
+        userRepo.delete(bootUser);
     }
 
     @Override
@@ -150,9 +146,9 @@ public class BootUserManager implements UserDetailsManager {
 
 		logger.debug("Changing password for user '" + username + "'");
 		BootUserVo pvo = (BootUserVo)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		BootUser p = personRepo.findOne(pvo.getId());		
+		BootUser p = userRepo.findOne(pvo.getId());		
 		p.setPassword(passwordEncoder.encode(newPassword));		
-		personRepo.save(p);
+		userRepo.save(p);
 		SecurityContextHolder.getContext().setAuthentication(
 				createNewAuthentication(currentUser, newPassword));
 //		userCache.removeUserFromCache(username);
@@ -171,13 +167,13 @@ public class BootUserManager implements UserDetailsManager {
     	BootUser person;
     	switch(tag){
     	case "username":
-            person = personRepo.findByName(emailOrUsernameOrMobile);
+            person = userRepo.findByName(emailOrUsernameOrMobile);
             break;
     	case "email":
-            person = personRepo.findByEmail(emailOrUsernameOrMobile);
+            person = userRepo.findByEmail(emailOrUsernameOrMobile);
             break;
     	case "mobile":
-            person = personRepo.findByMobile(emailOrUsernameOrMobile);
+            person = userRepo.findByMobile(emailOrUsernameOrMobile);
             break; 
         default:
             	person = null;
@@ -190,7 +186,7 @@ public class BootUserManager implements UserDetailsManager {
     }
     
     public BootUser findByName(String username){
-    	return personRepo.findByName(username);
+    	return userRepo.findByName(username);
     }
     
 	@Override

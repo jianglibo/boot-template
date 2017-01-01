@@ -22,7 +22,7 @@ import hello.domain.Role;
  *         2015年9月29日
  *
  */
-public class BootUserVo extends User{
+public class BootUserVo extends User {
     /**
      * 
      */
@@ -58,8 +58,8 @@ public class BootUserVo extends User{
         this.thirdConns = Sets.newHashSet();
     }
 
-    public BootUserVo(BootUser person) {
-        this(person, Sets.newHashSet());
+    public BootUserVo(BootUser bu) {
+        this(bu, Sets.newHashSet());
     }
 
     public BootUserVo(BootUser person, Set<Role> roles) {

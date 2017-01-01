@@ -52,3 +52,14 @@ server:
     tomcat:
         remote_ip_header: x-forwarded-for
         protocol_header: x-forwarded-proto
+# setx SPRING_PROFILES_ACTIVE dev
+---
+spring:
+    profiles: dev
+    security:
+        enable-csrf: true
+    thymeleaf:
+      cache: false
+      prefix: file:///f:/github/boot-template/src/main/resources/templates/
+
+

@@ -13,12 +13,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.DefaultLoginPageConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.session.ChangeSessionIdAuthenticationStrategy;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
 
-import hello.config.userdetail.BootUserManager;
+import hello.config.userdetail.BootUserDetailManager;
 import hello.config.userdetail.BootUserManagerConfigurer;
 
 
@@ -43,7 +44,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
 
     
     @Autowired
-    private BootUserManager bootUserManager;
+    private BootUserDetailManager bootUserManager;
     /**
      * disable default. then read father class's gethttp method. write all config your self.
      */
@@ -62,18 +63,48 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // @formatter:off
         BootUserManagerConfigurer<AuthenticationManagerBuilder> pc = auth.apply(new BootUserManagerConfigurer<AuthenticationManagerBuilder>(bootUserManager)).passwordEncoder(passwordEncoder);
+        pc.withUser("admin")
+        	.accountExpired(false)
+        	.accountLocked(false)
+        	.authorities("abc")
+        	.credentialsExpired(false)
+        	.disabled(false)
+        	.displayName("admin")
+        	.email("admin@localhost.com")
+        	.emailVerified(true)
+        	.mobile("123456789012")
+        	.password("123456");
         // @formatter:on
     };
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off
-        http.authorizeRequests()
-            .antMatchers(basePath + "/**").permitAll()
-//            .anyRequest().fullyAuthenticated()
-            .anyRequest().permitAll()
-            .and()
-            .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+		http
+		.csrf().and()
+		.addFilter(new WebAsyncManagerIntegrationFilter())
+		.exceptionHandling().and()
+		.headers().and()
+		.sessionManagement().and()
+		.securityContext().and()
+		.requestCache().and()
+		.anonymous().and()
+		.servletApi().and()
+		.authorizeRequests()
+        .antMatchers(basePath + "/**", "/login", "/", "/static/**", "/**").permitAll()
+        .anyRequest().authenticated().and()
+        .formLogin().loginPage("/login").and()
+		.apply(new DefaultLoginPageConfigurer<HttpSecurity>()).and()
+		.logout();
+		
+//        http.authorizeRequests()
+//            .antMatchers(basePath + "/**", "/login").permitAll()
+//            .anyRequest().authenticated();
+//            .anyRequest().fullyAuthenticated();
+//            .anyRequest().permitAll();
+        
+//            .and()
+//            .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
     }
 
     @Bean

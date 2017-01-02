@@ -91,9 +91,9 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
 		.anonymous().and()
 		.servletApi().and()
 		.authorizeRequests()
-        .antMatchers(basePath + "/**", "/login", "/", "/static/**", "/**").permitAll()
+        .antMatchers(basePath + "/**", "/page/login", "/", "/static/**", "/**").permitAll()
         .anyRequest().authenticated().and()
-        .formLogin().loginPage("/login").and()
+        .formLogin().loginPage("/page/login").and()
 		.apply(new DefaultLoginPageConfigurer<HttpSecurity>()).and()
 		.logout();
 		

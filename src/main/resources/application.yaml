@@ -60,6 +60,7 @@ spring:
         enable-csrf: true
     thymeleaf:
       cache: false
-      prefix: file:///f:/github/boot-template/src/main/resources/templates/
+#      prefix: file:///f:/github/boot-template/src/main/resources/templates/
+    devtools.restart.exclude: public/**
 
 

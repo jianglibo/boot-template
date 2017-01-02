@@ -3,7 +3,10 @@ package hello;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -24,5 +27,15 @@ public class Application {
 //            System.out.println(beanName);
 //        }
 //        System.out.println(beanNames.length);
+    }
+    
+    @Bean
+    public MessageSource messageSource() {
+    	ResourceBundleMessageSource parent = new ResourceBundleMessageSource();
+    	parent.setBasename("messages.shared");
+    	ResourceBundleMessageSource rbm = new ResourceBundleMessageSource();
+    	rbm.setParentMessageSource(parent);
+    	rbm.setBasenames("messages.format");
+    	return rbm;
     }
 }

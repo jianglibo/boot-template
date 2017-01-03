@@ -95,7 +95,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
         .anyRequest().authenticated().and()
         .formLogin().loginPage("/login").and()
 //        .rememberMe().and()
-		.apply(new DefaultLoginPageConfigurer<HttpSecurity>()).and()
+//		.apply(new DefaultLoginPageConfigurer<HttpSecurity>()).and()
 		.logout();
 //		.deleteCookies("remove").invalidateHttpSession(false)
 //			.logoutUrl("/custom-logout").logoutSuccessUrl("/logout-success");

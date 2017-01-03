@@ -32,19 +32,14 @@
         <span></span>
     </a>
 
-    <div id="menu" th:include="~{menu::nav_menu('abc')}">
+    <div id="menu">
         <div class="pure-menu">
             <a class="pure-menu-heading" href="#">Company</a>
 
-            <ul class="pure-menu-list">
-                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Home</a></li>
-                <li class="pure-menu-item"><a href="#" class="pure-menu-link">About</a></li>
-
-                <li class="pure-menu-item menu-item-divided pure-menu-selected">
-                    <a href="#" class="pure-menu-link">Services</a>
+            <ul class="pure-menu-list" th:each="mi : ${mainMenus}">
+                <li class="pure-menu-item" th:class="|pure-menu-item ${mi.extraClasses}|">
+                    <a href="#"  th:id="${mi.domId}?: _" th:href="@{${mi.href}}" class="pure-menu-link" th:text="#{|mainmenu.${mi.id}|}">MenuName</a>
                 </li>
-
-                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Contact</a></li>
             </ul>
         </div>
     </div>

@@ -1,5 +1,7 @@
 package hello.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -20,16 +22,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.google.common.collect.Lists;
+
 import hello.domain.LoginAttempt;
 import hello.domain.ThirdPartLogin.Provider;
+import hello.model.MenuItem;
+import hello.model.MenuItem.ShowMenuWhen;
+import hello.model.MenuItems;
 import hello.util.ControllerUtil;
 import hello.vo.BootUserAuthentication;
 import hello.vo.BootUserVo;
 import hello.vo.LoginAttemptForm;
 
 @Controller
-@RequestMapping(path = "/login")
-public class LoginController {
+public class LoginController implements HasMenuItemController {
 	
     public static String LOGIN_ATTEMTPT_REQUEST_KEY = "__LOGIN_ATTEMTPT_REQUEST_KEY";
 
@@ -46,25 +52,32 @@ public class LoginController {
     @Autowired
     private ControllerUtil cutil;
     
-    private LoginAttemptForm loginAttemptForm = new LoginAttemptForm();
+	@Autowired
+	private MenuItems menuItemFactory;
+	
+	@ModelAttribute(name="mainMenus")
+	public List<MenuItem> addMenuItemsToModel() {
+		return menuItemFactory.CloneMenuItems("login");
+	}
+	
     
     @ModelAttribute
-    public LoginAttemptForm getLoginAttemptForm() {
-    	return loginAttemptForm;
+    public void getLoginAttemptForm(Model model) {
+    	model.addAttribute("loginAttemptForm", new LoginAttemptForm());
     }
     
     private void decoModel(Model model, String frgTpl) {
 		model.addAttribute("frgTpl", frgTpl);
 		model.addAttribute("frgName", frgTpl);
     }
-	
-	@RequestMapping(method = RequestMethod.GET)
+    
+	@RequestMapping(path="/login", method = RequestMethod.GET)
 	public String loginGet(Model model) {
 		decoModel(model, "login");
 		return "index";
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(path="/login", method = RequestMethod.POST)
 	public String loginPost(@Valid final LoginAttemptForm loginAttemptForm, final BindingResult bindingResult,HttpServletRequest request, HttpServletResponse response, final Model model) {
 		if (v(request, response, loginAttemptForm)) {
 			return "redirect:/";
@@ -103,5 +116,13 @@ public class LoginController {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Override
+	public List<MenuItem> getMenuItems() {
+		MenuItem logout = new MenuItem("logout", "/logout", "menu-item-divide", ShowMenuWhen.LOGINED);
+		logout.setDomId("logoutMenuItem");
+		return Lists.newArrayList(new MenuItem("login","/login", "menu-item-divide", ShowMenuWhen.NOT_LOGIN),
+				logout);
 	}
 }

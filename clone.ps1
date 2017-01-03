@@ -31,8 +31,9 @@ $testSource = "src/test/java"
 $fixPositionsToCopy = ".gradle","emberworkspace","learning", ".gitignore", ".gitattributes", "build.gradle", "CHANGE.md", "clone.ps1", "gradle.properties.template","README.md"
 
 function Copy-JaveSource {
-    Param($srcFolders)
-    foreach ($srcFolder in $srcFolders) {
+    Param([parameter(ValueFromPipeline=$true)]$srcFolders)
+    Process {
+        $srcFolder = $_
         $s = $templateProject | Join-Path -ChildPath $srcFolder | Join-Path -ChildPath "hello"
         $d = $DstFolder | Join-Path -ChildPath $srcFolder | Join-Path -ChildPath $packagePathButLast
         if (-not (Test-Path $d -PathType Container)) {
@@ -75,14 +76,20 @@ function Copy-FixPositionFiles {
     | Copy-Item -Recurse | Out-Null
 }
 
-Copy-FixPositionFiles
-Copy-JaveSource -srcFolder "src/main/java", "src/test/java"
+function Copy-Resources {
+    Param([parameter(ValueFromPipeline=$true)]$srcFolders)
+    Process {
+        $rs = $templateProject | Join-Path -ChildPath $_
+        $rd = $DstFolder | Join-Path -ChildPath  ($_ | Split-Path -Parent)
 
-$rs = $templateProject | Join-Path -ChildPath "src/main/resources"
-$rd = $DstFolder | Join-Path -ChildPath "src/main"
+        if (-not (Test-Path $rd -PathType Container)) {
+            New-Item -Path $rd -Force
+        }
 
-if (-not (Test-Path $rd -PathType Container)) {
-    New-Item -Path $rd -Force
+        Copy-Item -Path $rs -Destination $rd -Recurse | Out-Null
+    }
 }
 
-Copy-Item -Path $rs -Destination $rd -Recurse | Out-Null
+Copy-FixPositionFiles
+"src/main/java", "src/test/java" | Copy-JaveSource
+"src/main/resources", "src/test/resources" | Copy-Resources

@@ -78,9 +78,11 @@ public class BootUserDetailManager implements UserDetailsManager {
        Set<Role> roleset = bootUserVoLocal.getAuthorities().stream()
     		   .map(ga -> ga.getAuthority())
     		   .map(gn -> gn.startsWith(ROLE_PREFIX) ? gn : ROLE_PREFIX + gn)
+    		   .map(String::toUpperCase)
     		   .map(rn -> new PairForStream<String, Role>(rn, roleRepo.findByName(rn)))
     		   .map(ot -> {
     			   if (ot.getSecond() == null ) {
+    				   logger.info("start insert role {}", ot.getFirst());
     				   Role r = new Role(ot.getFirst());
     				   return roleRepo.save(r);
     			   } else {
@@ -93,8 +95,11 @@ public class BootUserDetailManager implements UserDetailsManager {
 		   roleset.add(getOrCreateDefaultRole());
 	   }
        
-       BootUser bootUser = new BootUser(bootUserVoLocal, passwordEncoder.encode(bootUserVoLocal.getPassword()));
-       bootUser.getRoles().addAll(roleset);
+       BootUser bootUser = userRepo.findByName(bootUserVo.getUsername());
+       if (bootUser == null) {
+    	   bootUser = new BootUser(bootUserVoLocal, passwordEncoder.encode(bootUserVoLocal.getPassword()));
+       }
+       bootUser.setRoles(roleset);
        userRepo.save(bootUser);
     }
     

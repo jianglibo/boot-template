@@ -1,18 +1,25 @@
 package hello;
 
+import javax.sql.DataSource;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
 @ImportResource("classpath:repositories.xml")
 @EnableSpringDataWebSupport
+@EnableJpaRepositories(basePackages="hello.repository")
 @EnableWebMvc   
 public class Application {
 
@@ -38,4 +45,17 @@ public class Application {
     	rbm.setBasenames("messages.format", "messages.validate");
     	return rbm;
     }
+    
+    @Bean
+    @Primary
+    @ConfigurationProperties(prefix="spring.datasource")
+    public DataSource primaryDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+//    @Bean
+//    @ConfigurationProperties(prefix="spring.secondarydatasource")
+//    public DataSource secondaryDataSource() {
+//        return DataSourceBuilder.create().build();
+//    }
 }

@@ -1,21 +1,20 @@
 spring:
     datasource:
-        primary:
-            url: jdbc:h2:~/boottemplate
-            username: sa
-            password:
-            driver-class-name: org.h2.Driver
-            validation-query: SELECT 1
-            test-on-borrow: true
-        secondary:
-            url: jdbc:mysql://localhost:3306/boottemplate?useUnicode=true&characterEncoding=utf-8
-            username: boottemplate
-            password: 123456
-            driver-class-name: com.mysql.jdbc.Driver
-            validation-query: SELECT 1
-            test-on-borrow: true
+        url: jdbc:hsqldb:file:c:/db/boottemplate
+        username: sa
+        password:
+        driver-class-name: org.hsqldb.jdbc.JDBCDriver
+        validation-query: select 1 from INFORMATION_SCHEMA.SYSTEM_USERS
+        test-on-borrow: true
+    secondarydatasource:
+        url: jdbc:mysql://localhost:3306/boottemplate?useUnicode=true&characterEncoding=utf-8
+        username: boottemplate
+        password: 123456
+        driver-class-name: com.mysql.jdbc.Driver
+        validation-query: SELECT 1
+        test-on-borrow: true
     jpa:
-        database: H2
+        database: HSQL
         show-sql: true
         generate-ddl: true
 #        hibernate:

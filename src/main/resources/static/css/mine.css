@@ -1,0 +1,15 @@
+aside.error {
+    background: rgb(202, 60, 60); /* same color as selected state on site menu */
+    color: #fff;
+}
+aside.warning {
+    background: rgb(223, 117, 20); /* same color as selected state on site menu */
+    color: #fff;
+}
+aside.success {
+    background: rgb(28, 184, 65); /* same color as selected state on site menu */
+    color: #fff;
+}
+aside a, aside a:visited {
+    color: rgb(169, 226, 255);
+}

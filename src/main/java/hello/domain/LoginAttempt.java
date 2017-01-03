@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import hello.domain.ThirdPartLogin.Provider;
-import hello.vo.LoginAttemptVo;
+import hello.vo.LoginAttemptForm;
 
 @Entity
 @Table(name = "loginattemp")
@@ -29,7 +29,7 @@ public class LoginAttempt extends BaseEntity {
 	
 	public LoginAttempt() {}
 	
-	public LoginAttempt(LoginAttemptVo lato, String remoteAddress, String sessionId) {
+	public LoginAttempt(LoginAttemptForm lato, String remoteAddress, String sessionId) {
 		this.setUsername(lato.getUsername());
 		this.setPassword(lato.getPassword());
 		this.setRemoteAddress(remoteAddress);

@@ -918,9 +918,9 @@ aside {
     border-radius: 3px;
     color: #fff;
 }
-    aside a, aside a:visited {
-        color: rgb(169, 226, 255);
-    }
+aside a, aside a:visited {
+    color: rgb(169, 226, 255);
+}
 
 
 /* --------------------------

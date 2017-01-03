@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <aside th:class="${type}" th:fragment="aside(type, content)">
+        <p th:utext="${content}">
+        </p>
+    </aside>
+  </body>
+</html>

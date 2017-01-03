@@ -1,17 +1,24 @@
 package hello.vo;
 
-public class LoginAttemptVo {
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+public class LoginAttemptForm {
+
+	@NotNull
+	@Size(min=6,max=64, message="validate.login.username")
     private String username;
 
+	@NotNull
+	@Size(min=6,max=64, message="validate.login.password")
     private String password;
 
     private String captcha;
 
-    public LoginAttemptVo() {
+    public LoginAttemptForm() {
     }
 
-    public LoginAttemptVo(String username, String password) {
+    public LoginAttemptForm(String username, String password) {
         super();
         this.username = username;
         this.password = password;

@@ -35,7 +35,7 @@ public class Application {
     	parent.setBasename("messages.shared");
     	ResourceBundleMessageSource rbm = new ResourceBundleMessageSource();
     	rbm.setParentMessageSource(parent);
-    	rbm.setBasenames("messages.format");
+    	rbm.setBasenames("messages.format", "messages.validate");
     	return rbm;
     }
 }

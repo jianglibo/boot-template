@@ -1,0 +1,21 @@
+1. if missing some jar, just put it into spring-roo-1.3.2.RELEASE\bundle
+2. use help to view all
+3. database properties set --key "database.url" --value "jdbc:hsqldb:file:c:\db\boottemplate"
+4. database introspect --schema no-schema-required 
+5. database introspect --schema PUBLIC --file zz.sql
+6. database reverse engineer --schema PUBLIC --package zz.bb.cc
+
+Connection required?
+
+set ROO_OPTS=-Dfile.encoding=UTF-8 in roo.cmd
+
+jpa setup --provider HIBERNATE --database ORACLE 
+
+java -jar .\biz.aQute.bnd-latest.jar wrap -o ojdbc7.osgi.jar .\ojdbc7.jar
+
+then copy ojdbc7.osgi.jar to bundle folder.
+
+mvn install:install-file -Dfile=E:/jarfolder/ojdbc7.jar -DgroupId="com.oracle" -DartifactId=ojdbc7 -Dversion="ojdbc7.jar" -Dpackaging=jar -DgeneratePom=true
+
+jpa setup --provider HIBERNATE --database ORACLE
+database reverse engineer --schema %YOUR_SCHEMA% --package ~.domain

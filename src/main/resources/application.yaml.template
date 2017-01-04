@@ -13,6 +13,9 @@ spring:
         driver-class-name: com.mysql.jdbc.Driver
         validation-query: SELECT 1
         test-on-borrow: true
+    tomcat:
+        test-on-borrow: true
+        max-wait: 10000
     jpa:
         database: HSQL
         show-sql: true
@@ -30,6 +33,9 @@ spring:
         suffix: .html
     security:
         enable-csrf: true
+    batch:
+        job:
+            enabled: false
 management:
     security:
         enabled: false

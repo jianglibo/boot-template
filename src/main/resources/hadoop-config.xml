@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
+<beans:beans xmlns="http://www.springframework.org/schema/hadoop"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xmlns:hdp="http://www.springframework.org/schema/hadoop"
+   xmlns:beans= "http://www.springframework.org/schema/beans"
    xsi:schemaLocation="
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/hadoop
@@ -9,14 +9,14 @@
 
 <!--    <bean/>  -->
  
-   <hdp:configuration/>
+<!--    <hdp:configuration/>  -->
    
-   	<hdp:hive-client-factory id="hiveClientFactory" hive-data-source-ref="hiveDataSource"/>
-   	
-	<bean id="hiveDriver" class="org.apache.hive.jdbc.HiveDriver"/>
-	<bean id="hiveDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-  		<constructor-arg name="driver" ref="hiveDriver"/>
-  		<constructor-arg name="url" value="jdbc:hive2://localhost:1000"/>
-	</bean>
+<!--    	<hdp:hive-client-factory id="hiveClientFactory" hive-data-source-ref="hiveDataSource"/>  -->
+   	<hive-client-factory id="hiveClientFactory"/>   	
+	<beans:bean id="hiveDriver" class="org.apache.hive.jdbc.HiveDriver"/>
+	<beans:bean id="hiveDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+  		<beans:constructor-arg name="driver" ref="hiveDriver"/>
+  		<beans:constructor-arg name="url" value="jdbc:hive2://localhost:1000"/>
+	</beans:bean>
 
-</beans>
+</beans:beans>

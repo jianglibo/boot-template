@@ -25,6 +25,12 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.hidetake.ssh'
 
+eclipse {
+    classpath {
+        downloadSources = true
+    }
+}
+
 remotes {
   qingyun01 {
     host = 'www.xxx.xx'
@@ -64,12 +70,21 @@ repositories {
 //    compile("mysql:mysql-connector-java")
 //	compile("com.jhlabs:filters:2.0.235-1")
 
+configurations {
+//    all*.exclude module : 'spring-boot-starter-logging'
+//    all*.exclude module: "logback-classic"
+	compile.exclude group: 'ch.qos.logback'
+	compile.exclude group: 'org.mortbay.jetty'
+	compile.exclude group: 'org.eclipse.jetty.aggregate'
+}
+
 dependencies {
     // tag::jetty[]
-    compile("org.springframework.boot:spring-boot-starter-web") {
-        exclude module: "spring-boot-starter-tomcat"
-    }
-    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("org.springframework.boot:spring-boot-starter-web")
+//    {
+//        exclude module: "spring-boot-starter-tomcat"
+//    }
+//    compile("org.springframework.boot:spring-boot-starter-jetty")
     // end::jetty[]
     // tag::actuator[]
     compile("org.springframework.boot:spring-boot-starter-actuator")
@@ -96,7 +111,7 @@ dependencies {
 
 
     // https://mvnrepository.com/artifact/org.springframework.data/spring-data-hadoop
-    // compile group: 'org.springframework.data', name: 'spring-data-hadoop', version: '2.4.0.RELEASE'
+    compile group: 'org.springframework.data', name: 'spring-data-hadoop', version: '2.4.0.RELEASE'
 
     
     compile("org.eclipse.persistence:org.eclipse.persistence.jpa:2.6.4")

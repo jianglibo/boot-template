@@ -80,6 +80,24 @@ dependencies {
     }
     
     compile("org.springframework.boot:spring-boot-starter-batch")
+    compile("org.springframework.boot:spring-boot-starter-integration")
+
+    // https://mvnrepository.com/artifact/org.springframework.data/spring-data-hadoop-boot
+    compile group: 'org.springframework.data', name: 'spring-data-hadoop-boot', version: '2.4.0.RELEASE'
+
+    // https://mvnrepository.com/artifact/org.springframework.data/spring-data-hadoop-hive
+    compile group: 'org.springframework.data', name: 'spring-data-hadoop-hive', version: '2.4.0.RELEASE'
+
+    // https://mvnrepository.com/artifact/org.springframework.data/spring-data-hadoop-batch
+    compile group: 'org.springframework.data', name: 'spring-data-hadoop-batch', version: '2.4.0.RELEASE'
+
+    // https://mvnrepository.com/artifact/org.apache.hive/hive-jdbc
+    compile group: 'org.apache.hive', name: 'hive-jdbc', version: '2.1.1'
+
+
+    // https://mvnrepository.com/artifact/org.springframework.data/spring-data-hadoop
+    // compile group: 'org.springframework.data', name: 'spring-data-hadoop', version: '2.4.0.RELEASE'
+
     
     compile("org.eclipse.persistence:org.eclipse.persistence.jpa:2.6.4")
     

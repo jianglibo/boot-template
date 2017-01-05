@@ -17,7 +17,7 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
-@ImportResource("classpath:repositories.xml")
+@ImportResource({"classpath:repositories.xml", "classpath:hadoop-config.xml"})
 @EnableSpringDataWebSupport
 @EnableJpaRepositories(basePackages="hello.repository")
 @EnableWebMvc   
@@ -45,6 +45,7 @@ public class Application {
     	rbm.setBasenames("messages.format", "messages.validate");
     	return rbm;
     }
+    
     
     @Bean
     @Primary

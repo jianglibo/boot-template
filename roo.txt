@@ -19,3 +19,9 @@ mvn install:install-file -Dfile=E:/jarfolder/ojdbc7.jar -DgroupId="com.oracle" -
 
 jpa setup --provider HIBERNATE --database ORACLE
 database reverse engineer --schema %YOUR_SCHEMA% --package ~.domain
+
+tutorial:
+mkdir tut;cd tut
+project --topLevelPackage com.springsource.roo.pizzashop
+jpa setup --provider HIBERNATE --database HYPERSONIC_IN_MEMORY
+

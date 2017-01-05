@@ -36,6 +36,20 @@ spring:
     batch:
         job:
             enabled: false
+    hadoop:
+        fsUri: hdfs://http://10.74.111.62/8020
+#        resourceManagerAddress:
+#        resourceManagerSchedulerAddress:
+#        resourceManagerHost:
+#        resourceManagerPort:
+#        resourceManagerSchedulerPort:
+#        jobHistoryAddress:
+#        resources:
+#        config:
+#            fs:
+#                defaultFS: hdfs://localhost:8020
+        fsshell:
+            enabled: true
 management:
     security:
         enabled: false

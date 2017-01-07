@@ -14,13 +14,14 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
-@ImportResource({"classpath:repositories.xml", "classpath:hadoop-config.xml"})
+@ImportResource({"classpath:repositories.xml"/*, "classpath:hadoop-config.xml"*/})
 @EnableSpringDataWebSupport
 @EnableJpaRepositories(basePackages="hello.repository")
-@EnableWebMvc   
+@EnableWebMvc
 public class Application {
 
     public static void main(String[] args) {
@@ -36,17 +37,18 @@ public class Application {
 //        System.out.println(beanNames.length);
     }
     
-//    use: MessageSourceAutoConfiguration
+//    see: MessageSourceAutoConfiguration
+    
 //    @Bean
 //    public MessageSource messageSource() {
 //    	ResourceBundleMessageSource parent = new ResourceBundleMessageSource();
 //    	parent.setBasename("messages.shared");
 //    	ResourceBundleMessageSource rbm = new ResourceBundleMessageSource();
 //    	rbm.setParentMessageSource(parent);
-//    	rbm.setBasenames("messages.format", "messages.validate");
+//    	rbm.setBasenames("messages.children.format", "messages.children.validate");
 //    	return rbm;
 //    }
-    
+
     
     @Bean
     @Primary

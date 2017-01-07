@@ -8,6 +8,8 @@ package hello.config;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Named;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
@@ -26,10 +28,10 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @Configuration
 public class WebMvcConfigMine extends WebMvcConfigurerAdapter{
 	
-	@Bean
-	public LocaleResolver localResolver() {
+	@Bean(name="localeResolver")
+	public LocaleResolver localMissingEndeResolver() {
 		CookieLocaleResolver clr = new CookieLocaleResolver();
-		clr.setDefaultLocale(Locale.US);
+		clr.setDefaultLocale(Locale.ENGLISH); //Locale.US result en_US.properties.
 		return clr;
 	}
 	

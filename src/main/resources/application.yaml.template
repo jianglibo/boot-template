@@ -24,6 +24,8 @@ spring:
 #            ddl-auto: update
 #            naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
 #            dialect: org.hibernate.dialect.H2Dialect
+    messages:
+        basename: messages/shared,messages/children/format,messages/children/validate
     data:
         rest:
             base-path: /api/v1
@@ -49,7 +51,7 @@ spring:
 #            fs:
 #                defaultFS: hdfs://localhost:8020
         fsshell:
-            enabled: true
+            enabled: false
 management:
     security:
         enabled: false

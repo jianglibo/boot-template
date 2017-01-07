@@ -36,15 +36,16 @@ public class Application {
 //        System.out.println(beanNames.length);
     }
     
-    @Bean
-    public MessageSource messageSource() {
-    	ResourceBundleMessageSource parent = new ResourceBundleMessageSource();
-    	parent.setBasename("messages.shared");
-    	ResourceBundleMessageSource rbm = new ResourceBundleMessageSource();
-    	rbm.setParentMessageSource(parent);
-    	rbm.setBasenames("messages.format", "messages.validate");
-    	return rbm;
-    }
+//    use: MessageSourceAutoConfiguration
+//    @Bean
+//    public MessageSource messageSource() {
+//    	ResourceBundleMessageSource parent = new ResourceBundleMessageSource();
+//    	parent.setBasename("messages.shared");
+//    	ResourceBundleMessageSource rbm = new ResourceBundleMessageSource();
+//    	rbm.setParentMessageSource(parent);
+//    	rbm.setBasenames("messages.format", "messages.validate");
+//    	return rbm;
+//    }
     
     
     @Bean

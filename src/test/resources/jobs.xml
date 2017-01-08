@@ -1,0 +1,36 @@
+<beans:beans xmlns="http://www.springframework.org/schema/batch"
+     xmlns:beans="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/batch
+           http://www.springframework.org/schema/batch/spring-batch-2.2.xsd">
+
+    <job id="ioSampleJob" incrementer="runIdIncrementer">
+    	<listeners>
+    		<listener ref="jobCompletionNotificationListener"></listener>
+    	</listeners>
+        <step id="step1">
+            <tasklet  transaction-manager="transactionManager">
+                <chunk reader="itemReader" writer="itemWriter" commit-interval="2" processor="itemProcessor">
+                </chunk>
+            </tasklet>
+        </step>
+    </job>
+    
+    <beans:bean id="itemProcessor" class="hello.batch.PersonItemProcessor"/>
+    
+    <!-- 
+    <job-repository id="jobRepository"
+    	data-source="primaryDataSource"
+    	transaction-manager="transactionManager"
+    	isolation-level-for-create="SERIALIZABLE"
+    	table-prefix="BATCH_"
+		max-varchar-length="1000"/>
+		
+	<beans:bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+       <beans:property name="jobRepository" ref="jobRepository" />
+     </beans:bean>
+ 	-->
+</beans:beans>

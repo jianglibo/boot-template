@@ -2,11 +2,17 @@ package hello;
 
 import javax.sql.DataSource;
 
+import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.batch.core.configuration.support.AutomaticJobRegistrar;
+import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
@@ -18,14 +24,15 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
-@ImportResource({"classpath:repositories.xml", "classpath:hadoop-config.xml"})
 @EnableSpringDataWebSupport
 @EnableJpaRepositories(basePackages="hello.repository")
 @EnableWebMvc
-public class Application {
+public class ApplicationForT {
+	
+
 
     public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(ApplicationForT.class, args);
+        ApplicationContext ctx = SpringApplication.run(Application.class, args);
 
 //        System.out.println("Let's inspect the beans provided by Spring Boot:");
 //
@@ -49,6 +56,12 @@ public class Application {
 //    	return rbm;
 //    }
 
+    @Bean
+    public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor(JobRegistry jobRegistry) {
+    	JobRegistryBeanPostProcessor jrbpp = new JobRegistryBeanPostProcessor();
+    	jrbpp.setJobRegistry(jobRegistry);
+    	return jrbpp;
+    }
     
     @Bean
     @Primary

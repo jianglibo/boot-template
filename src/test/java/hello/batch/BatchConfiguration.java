@@ -2,9 +2,10 @@ package hello.batch;
 
 import javax.sql.DataSource;
 
+import org.hibernate.hql.internal.ast.tree.InitializeableNode;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -15,26 +16,31 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 @Configuration
-@EnableBatchProcessing
-public class BatchConfiguration {
+//@ImportResource({"classpath:jobs.xml"})
+@EnableBatchProcessing // if enable this, job.xml only need config jobs.
+public class BatchConfiguration implements InitializingBean {
 
     @Autowired
     public JobBuilderFactory jobBuilderFactory;
 
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
+    
+    @Autowired
+    public JobRegistry jobRegistry;
 
     @Autowired
     public DataSource dataSource;
-
-    // tag::readerwriterprocessor[]
+    
+   // tag::readerwriterprocessor[]
     @Bean
     public FlatFileItemReader<Person> reader() {
         FlatFileItemReader<Person> reader = new FlatFileItemReader<Person>();
@@ -63,6 +69,12 @@ public class BatchConfiguration {
         writer.setDataSource(dataSource);
         return writer;
     }
+    
+    @Bean(name="runIdIncrementer") @Scope("prototype")
+    public RunIdIncrementer runIdIncrementer() {
+    	return new RunIdIncrementer();
+    }
+    
     // end::readerwriterprocessor[]
 
     // tag::jobstep[]
@@ -86,4 +98,10 @@ public class BatchConfiguration {
                 .build();
     }
     // end::jobstep[]
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		
+		
+	}
 }

@@ -1,6 +1,6 @@
 spring:
     datasource:
-        url: jdbc:hsqldb:file:c:/db/boottemplate
+        url: jdbc:hsqldb:file:c:/db/boottemplate;shutdown=true
         username: sa
         password:
         driver-class-name: org.hsqldb.jdbc.JDBCDriver
@@ -26,9 +26,15 @@ spring:
 #            dialect: org.hibernate.dialect.H2Dialect
     messages:
         basename: messages/shared,messages/children/format,messages/children/validate
+        always-use-message-format: false
+        cache-seconds: -1
+        encoding: UTF-8
+        fallback-to-system-locale: true
     data:
         rest:
             base-path: /api/v1
+    mvc:
+        locale: en
     thymeleaf:
         cache: false
         prefix: classpath:/templates/
@@ -38,6 +44,8 @@ spring:
     batch:
         job:
             enabled: false
+    hive:
+        jdbcUrl: jdbc:hive2://10.74.111.62:10000/default
     hadoop:
         fsUri: hdfs://http://10.74.111.62/8020
 #        resourceManagerAddress:

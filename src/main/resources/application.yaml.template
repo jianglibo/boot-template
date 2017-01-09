@@ -47,7 +47,7 @@ spring:
     hive:
         jdbcUrl: jdbc:hive2://10.74.111.62:10000/default
     hadoop:
-        fsUri: hdfs://http://10.74.111.62/8020
+        fsUri: hdfs://10.74.111.62/8020
 #        resourceManagerAddress:
 #        resourceManagerSchedulerAddress:
 #        resourceManagerHost:
@@ -71,6 +71,7 @@ logging:
     level:
         cc.openscanner: DEBUG
         org.springframework.security.web.access: DEBUG
+        org.springframework.jdbc.core: DEBUG
 ---
 spring:
     profiles: prod

@@ -10,7 +10,7 @@
 <!--    <bean/>  -->
  
 <!--    <hdp:configuration/>  -->
-
+<!--   resources="classpath:/core-site.xml, classpath:/hdfs-site.xml"  -->
    	<configuration>
 		fs.defaultFS=${spring.hadoop.fsUri}
 	</configuration>

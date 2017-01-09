@@ -49,7 +49,7 @@ public class TestJobRepository extends Tbase {
 	public void jobCounts() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException, NoSuchJobException {
 
 		Collection<String> jns = jobOperator.getJobNames();
-		jobLauncher.run(jobRegistry.getJob("importUserJob"), new JobParameters());
+		jobLauncher.run(jobRegistry.getJob("ioSampleJob"), new JobParameters());
 		jns = jobRegistry.getJobNames();	
 		assertTrue(true);
 	}

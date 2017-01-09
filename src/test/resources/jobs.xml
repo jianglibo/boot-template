@@ -6,31 +6,17 @@
            http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/batch
            http://www.springframework.org/schema/batch/spring-batch-2.2.xsd">
-
-    <job id="ioSampleJob" incrementer="runIdIncrementer">
-    	<listeners>
-    		<listener ref="jobCompletionNotificationListener"></listener>
-    	</listeners>
-        <step id="step1">
-            <tasklet  transaction-manager="transactionManager">
-                <chunk reader="itemReader" writer="itemWriter" commit-interval="2" processor="itemProcessor">
-                </chunk>
-            </tasklet>
-        </step>
-    </job>
     
-    <beans:bean id="itemProcessor" class="hello.batch.PersonItemProcessor"/>
-    
-    <!-- 
-    <job-repository id="jobRepository"
-    	data-source="primaryDataSource"
-    	transaction-manager="transactionManager"
-    	isolation-level-for-create="SERIALIZABLE"
-    	table-prefix="BATCH_"
-		max-varchar-length="1000"/>
-		
-	<beans:bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
-       <beans:property name="jobRepository" ref="jobRepository" />
-     </beans:bean>
- 	-->
+    <beans:bean class="org.springframework.batch.core.configuration.support.AutomaticJobRegistrar">
+   		<beans:property name="applicationContextFactories">
+	      	<beans:bean class="org.springframework.batch.core.configuration.support.ClasspathXmlApplicationContextsFactoryBean">
+    	    	 <beans:property name="resources" value="classpath*:/config/job*.xml" />
+      		</beans:bean>
+   		</beans:property>
+   		<beans:property name="jobLoader">
+      		<beans:bean class="org.springframework.batch.core.configuration.support.DefaultJobLoader">
+         		<beans:property name="jobRegistry" ref="jobRegistry" />
+      		</beans:bean>
+   		</beans:property>
+	</beans:bean>
 </beans:beans>

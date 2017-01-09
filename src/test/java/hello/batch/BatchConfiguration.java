@@ -8,7 +8,9 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
@@ -55,7 +57,22 @@ public class BatchConfiguration implements InitializingBean {
         }});
         return reader;
     }
-
+    
+    @Bean @StepScope
+    public FlatFileItemReader<Person> itemReader() {
+        FlatFileItemReader<Person> reader = new FlatFileItemReader<Person>();
+        reader.setResource(new ClassPathResource("sample-data.csv"));
+        reader.setLineMapper(new DefaultLineMapper<Person>() {{
+            setLineTokenizer(new DelimitedLineTokenizer() {{
+                setNames(new String[] { "firstName", "lastName" });
+            }});
+            setFieldSetMapper(new BeanWrapperFieldSetMapper<Person>() {{
+                setTargetType(Person.class);
+            }});
+        }});
+        return reader;
+    }
+    
     @Bean
     public PersonItemProcessor processor() {
         return new PersonItemProcessor();
@@ -70,9 +87,13 @@ public class BatchConfiguration implements InitializingBean {
         return writer;
     }
     
-    @Bean(name="runIdIncrementer") @Scope("prototype")
-    public RunIdIncrementer runIdIncrementer() {
-    	return new RunIdIncrementer();
+    @Bean @StepScope
+    public JdbcBatchItemWriter<Person> itemWriter() {
+        JdbcBatchItemWriter<Person> writer = new JdbcBatchItemWriter<Person>();
+        writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<Person>());
+        writer.setSql("INSERT INTO people1 (first_name, last_name) VALUES (:firstName, :lastName)");
+        writer.setDataSource(dataSource);
+        return writer;
     }
     
     // end::readerwriterprocessor[]

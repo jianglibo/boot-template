@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
 @EnableSpringDataWebSupport
+@ImportResource(locations={"classpath:jobs.xml"})
 @EnableJpaRepositories(basePackages="hello.repository")
 @EnableWebMvc
 public class ApplicationForT {
@@ -32,7 +34,11 @@ public class ApplicationForT {
 
 
     public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(Application.class, args);
+        ApplicationContext ctx = SpringApplication.run(Application.class, args); 
+        
+//        SpringApplicationBuilder appBuilder =
+//        	       new	SpringApplicationBuilder()
+//        	       .child(sources)
 
 //        System.out.println("Let's inspect the beans provided by Spring Boot:");
 //

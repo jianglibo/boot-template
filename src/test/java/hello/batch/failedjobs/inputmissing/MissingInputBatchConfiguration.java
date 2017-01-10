@@ -1,11 +1,10 @@
-package hello.batch;
+package hello.batch.failedjobs.inputmissing;
 
 import javax.sql.DataSource;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
@@ -15,18 +14,24 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
+
+import hello.batch.Person;
+import hello.batch.PersonItemProcessor;
 
 @Configuration
-//@ImportResource({"classpath:jobs.xml"})
-@EnableBatchProcessing // if enable this, job.xml only need config jobs.
-public class BatchConfiguration implements InitializingBean {
+public class MissingInputBatchConfiguration implements ApplicationContextAware {
 	
-	public static final String IMPORT_USER_JOB = "importUserJob";
+	public static final String JOB_NAME = "missingInputJob";
+	
+	public static final String FIXTURE_SOURCE = "fixtnotingit/sample-data-notexists.csv";
+	
+	private ApplicationContext applicationContext;
 
     @Autowired
     public JobBuilderFactory jobBuilderFactory;
@@ -40,26 +45,10 @@ public class BatchConfiguration implements InitializingBean {
     @Autowired
     public DataSource dataSource;
     
-   // tag::readerwriterprocessor[]
-//    @Bean
-//    public FlatFileItemReader<Person> reader() {
-//        FlatFileItemReader<Person> reader = new FlatFileItemReader<Person>();
-//        reader.setResource(new ClassPathResource("sample-data.csv"));
-//        reader.setLineMapper(new DefaultLineMapper<Person>() {{
-//            setLineTokenizer(new DelimitedLineTokenizer() {{
-//                setNames(new String[] { "firstName", "lastName" });
-//            }});
-//            setFieldSetMapper(new BeanWrapperFieldSetMapper<Person>() {{
-//                setTargetType(Person.class);
-//            }});
-//        }});
-//        return reader;
-//    }
-//    
     @Bean
-    public FlatFileItemReader<Person> itemReader() {
+    public FlatFileItemReader<Person> missingInputJobItemReader() {
         FlatFileItemReader<Person> reader = new FlatFileItemReader<Person>();
-        reader.setResource(new ClassPathResource("fixtnotingit/sample-data.csv"));
+        reader.setResource(applicationContext.getResource("file://" + FIXTURE_SOURCE));
         reader.setLineMapper(new DefaultLineMapper<Person>() {{
             setLineTokenizer(new DelimitedLineTokenizer() {{
                 setNames(new String[] { "firstName", "lastName" });
@@ -72,21 +61,7 @@ public class BatchConfiguration implements InitializingBean {
     }
     
     @Bean
-    public PersonItemProcessor processor() {
-        return new PersonItemProcessor();
-    }
-
-//    @Bean
-//    public JdbcBatchItemWriter<Person> writer() {
-//        JdbcBatchItemWriter<Person> writer = new JdbcBatchItemWriter<Person>();
-//        writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<Person>());
-//        writer.setSql("INSERT INTO people (first_name, last_name) VALUES (:firstName, :lastName)");
-//        writer.setDataSource(dataSource);
-//        return writer;
-//    }
-    
-    @Bean
-    public JdbcBatchItemWriter<Person> itemWriter() {
+    public JdbcBatchItemWriter<Person> missingInputJobItemWriter() {
         JdbcBatchItemWriter<Person> writer = new JdbcBatchItemWriter<Person>();
         writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<Person>());
         writer.setSql("INSERT INTO people1 (first_name, last_name) VALUES (:firstName, :lastName)");
@@ -94,34 +69,35 @@ public class BatchConfiguration implements InitializingBean {
         return writer;
     }
     
-    // end::readerwriterprocessor[]
-
-    // tag::jobstep[]
     @Bean
-    public Job importUserJob(JobCompletionNotificationListener listener) {
-        return jobBuilderFactory.get(IMPORT_USER_JOB)
+    public PersonItemProcessor missingInputJobProcessor() {
+        return new PersonItemProcessor();
+    }
+    
+    @Bean
+    public Job missingInputJobJob(MissingInputJobCompletionNotificationListener listener) {
+        return jobBuilderFactory.get(JOB_NAME)
                 .incrementer(new RunIdIncrementer())
                 .listener(listener)
-                .flow(step1())
+                .flow(missingInputJobStep1())
                 .end()
                 .build();
     }
 
     @Bean
-    public Step step1() {
+    public Step missingInputJobStep1() {
         return stepBuilderFactory.get("step1")
                 .<Person, Person> chunk(10)
-                .reader(itemReader())
-                .processor(processor())
-                .writer(itemWriter())
+                .reader(missingInputJobItemReader())
+                .processor(missingInputJobProcessor())
+                .writer(missingInputJobItemWriter())
                 .allowStartIfComplete(true)
                 .build();
     }
-    // end::jobstep[]
+
 
 	@Override
-	public void afterPropertiesSet() throws Exception {
-		
-		
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
 	}
 }

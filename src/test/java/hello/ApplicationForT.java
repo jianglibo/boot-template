@@ -26,7 +26,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
 @EnableSpringDataWebSupport
-@ImportResource(locations={"classpath:jobs.xml"})
+//@ImportResource(locations={"classpath:jobs.xml"})
 @EnableJpaRepositories(basePackages="hello.repository")
 @EnableWebMvc
 public class ApplicationForT {

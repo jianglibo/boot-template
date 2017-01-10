@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 
 import org.junit.Test;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -47,11 +45,8 @@ public class TestJobRepository extends Tbase {
 	
 	@Test
 	public void jobCounts() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException, NoSuchJobException {
-
-		Collection<String> jns = jobOperator.getJobNames();
-		jobLauncher.run(jobRegistry.getJob("ioSampleJob"), new JobParameters());
-		jns = jobRegistry.getJobNames();	
-		assertTrue(true);
+		Collection<String> jns = jobRegistry.getJobNames();	
+		assertTrue(jns.size() > 0);
 	}
 
 }

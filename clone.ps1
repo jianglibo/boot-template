@@ -28,7 +28,7 @@ $lastPackageName = $wholePackagePath[-1]
 $resource = "java/main/resources"
 $testSource = "src/test/java"
 
-$fixPositionsToCopy = ".gradle","emberworkspace","learning", ".gitignore", ".gitattributes", "build.gradle", "CHANGE.md", "clone.ps1", "gradle.properties.template","README.md"
+$fixPositionsToCopy = "gradle","gradlew","gradlew.bat","emberworkspace","learning", ".gitignore", ".gitattributes", "build.gradle", "CHANGE.md", "clone.ps1", "gradle.properties.template","README.md", "roo.txt"
 
 function Copy-JaveSource {
     Param([parameter(ValueFromPipeline=$true)]$srcFolders)
@@ -50,19 +50,21 @@ function Copy-JaveSource {
             $currentFile = $_
             $originLines = Get-Content -Path $currentFile -Encoding UTF8
             $newLines = @()
-            $done = $false
+            # $done = $false
             foreach ($line in $originLines) {
-                if ($done) {
-                    $newLines += $line
-                } else {
+                # if ($done) {
+                #     $newLines += $line
+                # } else {
                     if ($line -match "^package\s+hello;$") {
-                        $newLines += "package $RootPackage"
+                        $newLines += "package ${RootPackage};"
                     } elseif ($line -match "^package\s+hello(\..*)$") {
                         $newLines += "package $RootPackage" + $Matches[1]
+                    } elseif ($line -match "^import\s+hello(\..*)$") {
+                        $newLines += "import $RootPackage" + $Matches[1]
                     } else {
-                        $newLines += $line
+                        $newLines += $line -replace "\Whello\.", "${RootPackage}."
                     }
-                }
+                # }
             }
             $newLines | Out-File $currentFile -Encoding utf8
         }
@@ -93,3 +95,5 @@ function Copy-Resources {
 Copy-FixPositionFiles
 "src/main/java", "src/test/java" | Copy-JaveSource
 "src/main/resources", "src/test/resources" | Copy-Resources
+
+Copy-Item -Path ($DstFolder | Join-Path -ChildPath gradle.properties.template) -Destination ($DstFolder | Join-Path -ChildPath gradle.properties)

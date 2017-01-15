@@ -3,6 +3,7 @@ package hello;
 import javax.sql.DataSource;
 
 import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.support.AutomaticJobRegistrar;
 import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
 import org.springframework.beans.BeansException;
@@ -26,9 +27,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
 @EnableSpringDataWebSupport
-//@ImportResource(locations={"classpath:jobs.xml"})
+@ImportResource(locations={"classpath:registrarOfJobs.xml", "classpath:repositories.xml", "classpath:hadoop-config.xml"})
 @EnableJpaRepositories(basePackages="hello.repository")
 @EnableWebMvc
+@EnableBatchProcessing
 public class ApplicationForT {
 	
 

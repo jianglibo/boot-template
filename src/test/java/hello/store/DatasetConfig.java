@@ -31,7 +31,7 @@ public class DatasetConfig {
   public DatasetRepositoryFactory datasetRepositoryFactory() {
     DatasetRepositoryFactory datasetRepositoryFactory = new DatasetRepositoryFactory();
     datasetRepositoryFactory.setConf(hadoopConfiguration);
-    datasetRepositoryFactory.setBasePath("/user/admin");
+    datasetRepositoryFactory.setBasePath("/user/" + System.getProperty("user.name"));
     datasetRepositoryFactory.setNamespace("default");
     return datasetRepositoryFactory;
   }

@@ -16,7 +16,10 @@
 	</configuration>
 	
 <!--    	<hdp:hive-client-factory id="hiveClientFactory" hive-data-source-ref="hiveDataSource"/>  -->
-   	<hive-client-factory id="hiveClientFactory"/>   	
+   	<hive-client-factory id="hiveClientFactory"/>
+   	
+   	<hive-template/>
+   	
 	<beans:bean id="hiveDriver" class="org.apache.hive.jdbc.HiveDriver"/>
 	<beans:bean id="hiveDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
   		<beans:constructor-arg name="driver" ref="hiveDriver"/>

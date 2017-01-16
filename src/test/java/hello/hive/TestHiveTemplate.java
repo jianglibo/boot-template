@@ -23,5 +23,7 @@ public class TestHiveTemplate extends TbatchBase {
 	public void t() {
 		List<String> dbs = bwht.getDbs();
 		assertThat("there should 2", dbs.size(), equalTo(2));
+		
+
 	}
 }

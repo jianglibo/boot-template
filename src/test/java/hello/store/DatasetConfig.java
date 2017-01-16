@@ -1,6 +1,7 @@
 package hello.store;
 
 import org.kitesdk.data.Formats;
+import org.kitesdk.data.PartitionStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,13 +43,17 @@ public class DatasetConfig {
     definition.setFormat(Formats.AVRO.getName());
     definition.setTargetClass(FileInfo.class);
     definition.setAllowNullValues(false);
+//    definition.setPartitionStrategy(new PartitionStrategy.Builder().year("modified").month("modified").build()); // /year=2015/month=01/u-u-i-d.avro style files will be created.
+    definition.setPartitionStrategy(new PartitionStrategy.Builder().dateFormat("modified", "Y_M", "yyyyMM").build()); // /Y_M=201501/u-u-i-d.avro style directories will be created.
     return definition;
   }
   
   @Bean
   public DataStoreWriter<FileInfo> dataStoreWriter() {
-    return new AvroPojoDatasetStoreWriter<FileInfo>(FileInfo.class,
+    AvroPojoDatasetStoreWriter<FileInfo> ws = new AvroPojoDatasetStoreWriter<FileInfo>(FileInfo.class,
         datasetRepositoryFactory(), fileInfoDatasetDefinition());
+    
+    return ws;
   }
   
   

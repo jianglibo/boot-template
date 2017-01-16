@@ -28,6 +28,7 @@ import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -44,6 +45,8 @@ public class TbatchBase extends Tbase {
 
 	@Autowired
 	protected DataSource primayDataSource;
+	
+	protected @Autowired org.apache.hadoop.conf.Configuration hadoopConfiguration;
 	
 	@Autowired
 	protected JobRegistry jobRegistry;
@@ -69,7 +72,12 @@ public class TbatchBase extends Tbase {
 	@Autowired
 	protected ApplicationContext applicationContext;
 	
+	@Value("${spring.hadoop.fsUri}")
+	private String fsUri;
+	
 	private String jobName;
+	
+	public TbatchBase(){}
 	
 	public TbatchBase(String jobName) {
 		this.jobName = jobName;
@@ -190,5 +198,4 @@ public class TbatchBase extends Tbase {
 	public void setJobName(String jobName) {
 		this.jobName = jobName;
 	}
-	
 }

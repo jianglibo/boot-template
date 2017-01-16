@@ -13,5 +13,17 @@ public class ApplicationConfig {
 	public String getOutSideBaseUrl() {
 		return null;
 	}
+	
+	public String getDataWriteSourcePath() {
+		return dataWriteSourcePath;
+	}
+
+	public void setDataWriteSourcePath(String dataWriteSourcePath) {
+		this.dataWriteSourcePath = dataWriteSourcePath;
+	}
+
+	private String dataWriteSourcePath;
+	
+	
 
 }

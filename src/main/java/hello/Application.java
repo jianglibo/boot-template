@@ -1,7 +1,11 @@
 package hello;
 
+import java.io.IOException;
+
 import javax.sql.DataSource;
 
+import org.apache.hadoop.fs.FileSystem;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
@@ -49,12 +53,20 @@ public class Application {
 //    	return rbm;
 //    }
 
+	@Autowired
+	private org.apache.hadoop.conf.Configuration configuration;
     
     @Bean
     @Primary
     @ConfigurationProperties(prefix="spring.datasource")
     public DataSource primaryDataSource() {
         return DataSourceBuilder.create().build();
+    }
+    
+    @Bean("fsForApi")
+    public FileSystem hdFileSystem() throws IOException {
+    	FileSystem fs = FileSystem.get(configuration);
+    	return fs;
     }
 
 //    @Bean

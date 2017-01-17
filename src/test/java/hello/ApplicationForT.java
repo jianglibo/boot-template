@@ -1,5 +1,7 @@
 package hello;
 
+import java.io.IOException;
+
 import javax.sql.DataSource;
 
 import org.springframework.batch.core.configuration.JobRegistry;
@@ -20,6 +22,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.data.hadoop.fs.CustomResourceLoaderRegistrar;
+import org.springframework.data.hadoop.fs.HdfsResourceLoader;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.util.StringUtils;
@@ -33,7 +39,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableBatchProcessing
 public class ApplicationForT {
 	
-
+	
 
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(Application.class, args); 
@@ -76,6 +82,20 @@ public class ApplicationForT {
     @ConfigurationProperties(prefix="spring.datasource")
     public DataSource primaryDataSource() {
         return DataSourceBuilder.create().build();
+    }
+    
+    @Bean
+    public HdfsResourceLoader hrl(org.apache.hadoop.conf.Configuration hadoopConfiguration) {
+    	HdfsResourceLoader hrl = new HdfsResourceLoader(hadoopConfiguration);
+//    	hrl.setHandleNoprefix(false);
+    	return hrl;
+    }
+    
+    @Bean
+    public CustomResourceLoaderRegistrar crlr(HdfsResourceLoader hrl) {
+    	CustomResourceLoaderRegistrar crlr = new CustomResourceLoaderRegistrar();
+    	crlr.setLoader(hrl);
+    	return crlr;
     }
 
 //    @Bean

@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ public class FsUtil {
 	@Value("${spring.hadoop.fsUri}")
 	private String fsUri;
 	
+	@Autowired
 	private FileSystem fs;
 
 	public String getFileContent(Path hdpath) throws IOException {
@@ -26,8 +28,8 @@ public class FsUtil {
 
 	}
 	
-	public String getFileContent(String p) throws IOException {
-		return getFileContent(convertToUserPath(p));
+	public String getFileContent(String string) throws IOException {
+		return getFileContent(convertToUserPath(string));
 	}
 	
 	public org.apache.hadoop.fs.Path convertToUserPath(String p) {
@@ -38,8 +40,8 @@ public class FsUtil {
 		return new org.apache.hadoop.fs.Path(s);
 	}
 	
-	public String convertToFullUserPath(String p) {
-		String s = convertToUserPath(p).toString();
+	public String convertToFullUserPath(String string) {
+		String s = convertToUserPath(string).toString();
 		if (!s.startsWith("hdfs://")) {
 			s = fsUri + s;
 		}

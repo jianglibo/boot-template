@@ -17,7 +17,7 @@
 	
 <!--    	<hdp:hive-client-factory id="hiveClientFactory" hive-data-source-ref="hiveDataSource"/>  -->
    	<hive-client-factory id="hiveClientFactory"/>
-   	
+	
    	<hive-template/>
    	
 	<beans:bean id="hiveDriver" class="org.apache.hive.jdbc.HiveDriver"/>

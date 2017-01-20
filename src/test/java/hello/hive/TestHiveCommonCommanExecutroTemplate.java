@@ -11,45 +11,47 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import hello.batch.TbatchBase;
+import hello.TbatchBase;
 import hello.util.FsUtil;
 
-public class TestHiveTemplate extends TbatchBase {
+public class TestHiveCommonCommanExecutroTemplate extends TbatchBase {
 
 	@Autowired
-	private HiveExecutor bwht;
+	private HiveCommonCommandExecutor bwht;
 	
 	@Autowired
-	private HiveCreateTable hct;
+	private HiveCommonCommandExecutor hct;
 	
 	@Autowired
 	private FsUtil fsUtil;
 	
-	public TestHiveTemplate() {
+	public TestHiveCommonCommanExecutroTemplate() {
 		super(null);
 	}
 	
 	@Before
 	public void be() {
 		bwht.dropTable("createWithLiteral");
+		bwht.dropTable("createWithUrl");
 	}
 	
 	@After
 	public void af() {
-		bwht.dropTable("createWithLiteral");
+//		bwht.dropTable("createWithLiteral");
+//		bwht.dropTable("createWithUrl");
 	}
 
-	@Test
-	public void t() {
-		
-	}
 	
 	@Test
 	public void tCreateTable() throws IOException {
 		List<String> tbs = bwht.showTable();
 		String script = hct.avroSchemaLiteral("createWithLiteral", "hdfs:" + fsUtil.convertToUserPath("default/fileinfo/.metadata/schema.avsc").toString());
-		List<String> ss = bwht.execute(script);
-		ss.forEach(System.out::println);
+		bwht.execute(script);
+		assertThat(bwht.showTable().size() - tbs.size(), equalTo(1));
+		
+		tbs = bwht.showTable();
+		hct.avroSchemaUrl("createWithUrl", fsUtil.convertToFullUserPath("default/fileinfo/.metadata/schema.avsc"));
+		bwht.execute(script);
 		assertThat(bwht.showTable().size() - tbs.size(), equalTo(1));
 		
 	}

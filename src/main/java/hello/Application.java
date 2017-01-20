@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.sql.DataSource;
 
 import org.apache.hadoop.fs.FileSystem;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableSpringDataWebSupport
 @EnableJpaRepositories(basePackages="hello.repository")
 @EnableWebMvc
+@EnableBatchProcessing
 public class Application {
 
     public static void main(String[] args) {

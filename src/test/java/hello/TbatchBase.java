@@ -1,4 +1,4 @@
-﻿package hello.batch;
+﻿package hello;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -33,8 +33,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.google.common.base.Strings;
-
-import hello.Tbase;
 
 
 public class TbatchBase extends Tbase {

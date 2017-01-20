@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.io.ByteStreams;
 
-import hello.batch.TbatchBase;
+import hello.TbatchBase;
 
 public class TestHiveTestTable extends TbatchBase {
 	

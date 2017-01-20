@@ -43,11 +43,11 @@ spring:
         enable-csrf: true
     batch:
         job:
-            enabled: false
+            enabled: true
     hive:
         jdbcUrl: jdbc:hive2://10.74.111.62:10000/default
     hadoop:
-        fsUri: hdfs://10.74.111.62/8020
+        fsUri: hdfs://10.74.111.62:8020
 #        resourceManagerAddress:
 #        resourceManagerSchedulerAddress:
 #        resourceManagerHost:
@@ -72,6 +72,8 @@ logging:
         cc.openscanner: DEBUG
         org.springframework.security.web.access: DEBUG
         org.springframework.jdbc.core: DEBUG
+myapp:
+    dataWriteSourcePath: E:\OneDriver\OneDrive\浙江政务服务网
 ---
 spring:
     profiles: prod
@@ -92,5 +94,8 @@ spring:
       cache: false
 #      prefix: file:///f:/github/boot-template/src/main/resources/templates/
     devtools.restart.exclude: public/**
+    batch:
+        job:
+            enabled: false
 
 

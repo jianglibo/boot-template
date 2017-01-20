@@ -1,25 +1,35 @@
 Param(
     [parameter(Mandatory=$true)][string]$DstFile,
-    [parameter(Mandatory=$true)][int]$UniqueNumber,
-    [parameter(Mandatory=$true)][int]$TotalNumber,
-    [parameter(Mandatory=$true)][int]$NumberPerLine
+    [parameter(Mandatory=$true)][int]$UniqueWordNumber,
+    [parameter(Mandatory=$true)][int]$TotalWordNumber,
+    [parameter(Mandatory=$true)][int]$MaxWordsPerLine
 )
 
-$words = @()
-
-0..$UniqueNumber | ForEach-Object {
-    $words += (-join ((65..90) + (97..122) | Get-Random -Count 5 | ForEach-Object {[char]$_}))
+[array]$words = 0..$UniqueWordNumber | ForEach-Object {
+    -join ((65..90) + (97..122) | Get-Random -Count (Get-Random -Maximum 15 -Minimum 5) | ForEach-Object {[char]$_})
 }
 
-# $stream = New-Object System.IO.StreamWriter($DstFile)
-$stream = System.IO.File.CreateText($DstFile)
+if (-not ([System.IO.Path]::IsPathRooted($DstFile))) {
+    $DstFile = $PSScriptRoot | Join-Path -ChildPath $DstFile
+}
+
+$stream = [System.IO.StreamWriter]$DstFile
+
 do {
-    $line = (0..$NumberPerLine | ForEach-Object {$words[(Get-Random -Minimum 0 -Maximum $UniqueNumber)]}) -join " "
-    $stream.WriteLine($line)
-    $TotalNumber -= 1
-} while ($TotalNumber -gt 0)
+    $perline = Get-Random -Minimum 1 -Maximum $MaxWordsPerLine
+    [array]$wordsInLine = @()
+    if ($TotalWordNumber -lt $perline) {
+        $perline = $TotalWordNumber
+    }
+    for ($i = 0; $i -lt $perline; $i++) {
+        $wordsInLine += $words[(Get-Random -Minimum 0 -Maximum $UniqueNumber)]
+        $TotalWordNumber--
+    }
+    $stream.WriteLine($wordsInLine -join " ")
+} while ($TotalWordNumber -gt 0)
 
-#  | Out-File $DstFile -Encoding ascii
-
-# $stream.Flush()
+$stream.Flush()
 $stream.close()
+
+# verify result
+# Get-Content $DstFile | ForEach-Object -Begin {$total = 0} -Process {$total += ($_ -split "\s+").Count} -End {$total} | Select-Object @{n="totalWords";e={$total}}

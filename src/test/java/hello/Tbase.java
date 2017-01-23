@@ -20,7 +20,7 @@ import hello.repository.FooRepository;
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = ApplicationForT.class)
+@SpringBootTest(classes = Application.class)
 public class Tbase {
     
     @Autowired

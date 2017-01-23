@@ -11,6 +11,7 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.scope.JobScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -35,15 +36,15 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import hello.util.SecurityUtil;
 
 @SpringBootApplication
-@ImportResource({"classpath:repositories.xml", "classpath:hadoop-config.xml"})
 @EnableSpringDataWebSupport
+@ImportResource(locations={"classpath:registrarOfJobs.xml", "classpath:repositories.xml", "classpath:hadoop-config.xml"})
 @EnableJpaRepositories(basePackages="hello.repository")
 @EnableWebMvc
 @EnableBatchProcessing
 public class Application {
 
     public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(ApplicationForT.class, args);
+        ApplicationContext ctx = SpringApplication.run(Application.class, args);
 
 //        System.out.println("Let's inspect the beans provided by Spring Boot:");
 //
@@ -108,6 +109,11 @@ public class Application {
     	jl.setJobRepository(jobRepository);
     	return jl;
     }
+    
+//    @Bean
+//    public JobScope jobScope() {
+//    	return new JobScope();
+//    }
 
 //    @Bean
 //    @ConfigurationProperties(prefix="spring.secondarydatasource")

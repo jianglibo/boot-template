@@ -1,4 +1,4 @@
-package hello.hadoopwc;
+package hello.hadoopwc.mrcode;
 
 import java.util.ArrayList;
 import java.util.List;

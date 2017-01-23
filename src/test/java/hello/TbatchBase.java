@@ -62,7 +62,7 @@ public class TbatchBase extends Tbase {
 	protected JobExplorer jobExplorer;
 	
 	@Autowired
-	protected JobLauncher jobLauncher;
+	protected JobLauncher syncJobLauncher;
 	
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;

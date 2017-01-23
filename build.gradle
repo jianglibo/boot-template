@@ -142,7 +142,14 @@ dependencies {
     testCompile("org.skyscreamer:jsonassert:1.4.0")
 }
 
-
+/*
+task compileWordCount (type: JavaCompile) {
+    source = sourceSets.test.java.srcDirs
+    include 'some/pkg/ClassTwo.java'
+    classpath = sourceSets.main.compileClasspath
+    destinationDir = sourceSets.main.output.classesDir
+}
+*/
 eclipse {
     classpath {
          containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')

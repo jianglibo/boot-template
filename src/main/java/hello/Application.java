@@ -1,11 +1,16 @@
 package hello;
 
 import java.io.IOException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 import javax.sql.DataSource;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.support.SimpleJobLauncher;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,10 +22,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.core.task.AsyncTaskExecutor;
+import org.springframework.data.hadoop.fs.DistCp;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import hello.util.SecurityUtil;
 
 @SpringBootApplication
 @ImportResource({"classpath:repositories.xml", "classpath:hadoop-config.xml"})
@@ -69,6 +81,32 @@ public class Application {
     public FileSystem hdFileSystem() throws IOException {
     	FileSystem fs = FileSystem.get(configuration);
     	return fs;
+    }
+    
+    /**
+     * distCp is for inter/intra cluster copy. In other words, It's not for local to cluster copy.
+     * @return
+     */
+    @Bean
+    public DistCp distCp() {
+    	return new DistCp(configuration, System.getProperty("user.name"));
+//    	return new DistCp(configuration);
+    }
+    
+    @Bean("asyncJobLauncher")
+    public JobLauncher asyncJl(JobRepository jobRepository) {
+    	SimpleJobLauncher jl = new SimpleJobLauncher();
+    	jl.setJobRepository(jobRepository);
+    	ThreadPoolTaskExecutor tpte = new ThreadPoolTaskExecutor();
+    	jl.setTaskExecutor(new DelegatingSecurityContextAsyncTaskExecutor(tpte, SecurityContextHolder.getContext()));
+    	return jl;
+    }
+    
+    @Bean("syncJobLauncher")
+    public JobLauncher syncJl(JobRepository jobRepository) {
+    	SimpleJobLauncher jl = new SimpleJobLauncher();
+    	jl.setJobRepository(jobRepository);
+    	return jl;
     }
 
 //    @Bean

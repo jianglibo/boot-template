@@ -22,7 +22,7 @@ do {
         $perline = $TotalWordNumber
     }
     for ($i = 0; $i -lt $perline; $i++) {
-        $wordsInLine += $words[(Get-Random -Minimum 0 -Maximum $UniqueNumber)]
+        $wordsInLine += $words[(Get-Random -Minimum 0 -Maximum $UniqueWordNumber)]
         $TotalWordNumber--
     }
     $stream.WriteLine($wordsInLine -join " ")

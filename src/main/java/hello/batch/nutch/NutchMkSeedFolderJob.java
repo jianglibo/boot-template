@@ -36,8 +36,8 @@ public class NutchMkSeedFolderJob extends JobConfigurationBase {
 	@Autowired
 	private FileSystem fs;
 	
-	@Value("${spring.nutchSeeds}")
-	private String nutchSeedsFolder;
+	@Value("${spring.nutchBaseFolder}")
+	private String nutchBaseFolder;
 
     @Bean("NutchMkSeedFolderJob")
     public Job job() {
@@ -61,7 +61,7 @@ public class NutchMkSeedFolderJob extends JobConfigurationBase {
     	return new Tasklet() {
 			@Override
 			public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-				fs.mkdirs(new Path(nutchSeedsFolder));
+				fs.mkdirs(new Path(nutchBaseFolder));
 				return RepeatStatus.FINISHED;
 			}
 		};

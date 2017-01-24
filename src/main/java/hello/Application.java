@@ -34,7 +34,7 @@ import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecu
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import hello.util.HdpFolderUtil;
+import hello.util.WordCountFolderUtil;
 import hello.util.SecurityUtil;
 
 @SpringBootApplication
@@ -72,11 +72,6 @@ public class Application {
 
 	@Autowired
 	private org.apache.hadoop.conf.Configuration configuration;
-	
-	@Bean("nutchFolderUtil")
-	public HdpFolderUtil nutchFolder(@Value("${spring.nutchSeeds}") String baseFolder) {
-		return new HdpFolderUtil(baseFolder);
-	}
     
     @Bean
     @Primary

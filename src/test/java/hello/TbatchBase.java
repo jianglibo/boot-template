@@ -39,6 +39,10 @@ public class TbatchBase extends Tbase {
 	
 	public static String BATCH_FIXTURE_BASE = "./src/test/resources/fixtnotingit/";
 	
+	public static String FIXTURE_BASE = "./src/test/resources/fixtures";
+	
+	public static String HDP_FIXTURE_BASE = "fixtures";
+	
 	public static Logger LOGGER = LoggerFactory.getLogger(TbatchBase.class);
 
 	@Autowired

@@ -42,7 +42,8 @@ spring:
     security:
         enable-csrf: true
     batch:
-        job:
+        job: 
+            names: a,b,c 
             enabled: true
     hive:
         jdbcUrl: jdbc:hive2://10.74.111.62:10000/default
@@ -60,6 +61,7 @@ spring:
 #                defaultFS: hdfs://localhost:8020
         fsshell:
             enabled: false
+    nutchSeeds: nutchSeeds 
 management:
     security:
         enabled: false
@@ -96,6 +98,7 @@ spring:
     devtools.restart.exclude: public/**
     batch:
         job:
-            enabled: false
+            names: a,b,c
+            enabled: true
 
 

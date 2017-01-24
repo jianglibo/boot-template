@@ -45,6 +45,8 @@ public class TestWcJob extends TbatchBase {
 	
 	private Path remotePath;
 	private java.nio.file.Path localWcTxt;
+	private java.nio.file.Path localWcJar;
+
 	
 	@Before
 	public void b() throws IOException {
@@ -56,14 +58,21 @@ public class TestWcJob extends TbatchBase {
 		if (fs.exists(remotePath)) {
 			fs.delete(remotePath, true);
 		}
+		
+		localWcJar = Paths.get("mrjars", "wc.jar");
+		if (!Files.exists(localWcJar)) {
+			throw new RuntimeException(localWcJar.toAbsolutePath().normalize().toString() + " doesn't exists. Pleas follow the README.md in project root to build jar first.");
+		}
 	}
 	
 	@Test
 	public void t() throws NoSuchJobException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException, NoSuchJobInstanceException, InterruptedException, JobParametersNotFoundException, UnexpectedJobExecutionException, IOException {
 		Job jb1 = jobRegistry.getJob(getJobName());
-		JobParameter jp = new JobParameter(localWcTxt.normalize().toAbsolutePath().toString());
+		JobParameter jpfile = new JobParameter(localWcTxt.normalize().toAbsolutePath().toString());
+		JobParameter jpjar = new JobParameter(localWcJar.normalize().toAbsolutePath().toString());
 		Map<String, JobParameter> jpmap = Maps.newHashMap();
-		jpmap.put(WcJob.PARAM_FILE_TO_WC, jp);
+		jpmap.put(WcJob.PARAM_FILE_TO_WC, jpfile);
+		jpmap.put(WcJob.PARAM_JAR_TO_WC, jpjar);
 		JobParameters jps = new JobParameters(jpmap);
 		JobExecution je1 = syncJobLauncher.run(jb1, jps);
 		assertTrue("status should be compeleted", je1.getStatus() == BatchStatus.COMPLETED);

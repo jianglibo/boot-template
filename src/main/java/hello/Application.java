@@ -13,6 +13,7 @@ import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.scope.JobScope;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
@@ -33,6 +34,7 @@ import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecu
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import hello.util.HdpFolderUtil;
 import hello.util.SecurityUtil;
 
 @SpringBootApplication
@@ -70,6 +72,11 @@ public class Application {
 
 	@Autowired
 	private org.apache.hadoop.conf.Configuration configuration;
+	
+	@Bean("nutchFolderUtil")
+	public HdpFolderUtil nutchFolder(@Value("${spring.nutchSeeds}") String baseFolder) {
+		return new HdpFolderUtil(baseFolder);
+	}
     
     @Bean
     @Primary

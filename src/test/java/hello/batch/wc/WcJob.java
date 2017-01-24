@@ -26,9 +26,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.core.io.Resource;
 import org.springframework.data.hadoop.batch.mapreduce.JarTasklet;
 
 import hello.batch.JobConfigurationBase;
+import hello.hadoopwc.mrcode.WordCount2;
 
 @Configuration
 public class WcJob extends JobConfigurationBase {
@@ -39,6 +41,7 @@ public class WcJob extends JobConfigurationBase {
 	public static final String JOB_NAME = "wcjobXml";
 	
 	public static final String PARAM_FILE_TO_WC = "fileToWc";
+	public static final String PARAM_JAR_TO_WC = "jarToWc";
 	
 	@Autowired
 	private FileSystem fs;
@@ -69,13 +72,20 @@ public class WcJob extends JobConfigurationBase {
 //                .end()
 //                .build();
 //    }
+	
     
-//    @Bean("WcJobJarTasklet")
-//    public JarTasklet jarTasklet() {
-//    	JarTasklet jt = new JarTasklet();
-//    	jt.setJar(jar);
-//    	return jt;
-//    }
+    @Bean("WcJobJarTasklet")
+    @StepScope
+    public JarTasklet jarTasklet(@Value("#{jobParameters['jarToWc']}") String jarFile, @Value("#{jobParameters['fileToWc']}") String localFile) {
+    	Path localJavaPath = Paths.get(localFile).normalize().toAbsolutePath();
+    	org.apache.hadoop.fs.Path remoteHadoopPath = new org.apache.hadoop.fs.Path(nutchSeedsFolder, localJavaPath.getFileName().toString());
+    	Resource jarRc = applicationContext.getResource("file:///" + jarFile);
+    	JarTasklet jt = new JarTasklet();
+    	jt.setJar(jarRc);
+    	jt.setArguments();
+    	jt.setMainClass(WordCount2.class.getName());
+    	return jt;
+    }
     
     @Bean("copyFileTasklet")
     @StepScope
@@ -85,8 +95,7 @@ public class WcJob extends JobConfigurationBase {
     	return new Tasklet() {
 			@Override
 			public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-				String fileToWc = (String) chunkContext.getStepContext().getJobParameters().get(PARAM_FILE_TO_WC);
-				Path localJavaPath = Paths.get(fileToWc).normalize().toAbsolutePath();
+				Path localJavaPath = Paths.get(localFile).normalize().toAbsolutePath();
 				org.apache.hadoop.fs.Path localHadoopPath = new org.apache.hadoop.fs.Path(localJavaPath.toString());
 				org.apache.hadoop.fs.Path remoteHadoopPath = new org.apache.hadoop.fs.Path(nutchSeedsFolder, localJavaPath.getFileName().toString());
 				fs.copyFromLocalFile(localHadoopPath, remoteHadoopPath);

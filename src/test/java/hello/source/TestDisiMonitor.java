@@ -14,7 +14,7 @@ public class TestDisiMonitor extends Tbase {
 	
 	@Test
 	public void t() throws IOException, InterruptedException {
-		dm.startRecursiveWatcher();
+//		dm.startRecursiveWatcher();
 		Thread.sleep(1000* 60 * 10);
 	}
 

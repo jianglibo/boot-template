@@ -55,7 +55,11 @@ spring:
 #        resourceManagerPort:
 #        resourceManagerSchedulerPort:
 #        jobHistoryAddress:
-#        resources:
+        resources:
+            - file:///E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/core-site.xml
+            - file:///E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/hdfs-site.xml
+            - file:///E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/mapred-site.xml
+            - file:///E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/yarn-site.xml
 #        config:
 #            fs:
 #                defaultFS: hdfs://localhost:8020
@@ -74,6 +78,8 @@ logging:
         cc.openscanner: DEBUG
         org.springframework.security.web.access: DEBUG
         org.springframework.jdbc.core: DEBUG
+        org.springframework.batch: DEBUG
+        org.apache.hadoop.mapreduce: DEBUG
 myapp:
     dataWriteSourcePath: E:\OneDriver\OneDrive\浙江政务服务网
 ---

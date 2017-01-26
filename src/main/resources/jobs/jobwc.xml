@@ -17,7 +17,7 @@
         	<tasklet ref="copyFileTasklet"></tasklet>
         </step>
         <step id="wc-step-runjar" allow-start-if-complete="true">
-        	<tasklet ref="WcJobJarTasklet"></tasklet>
+        	<tasklet ref="WcJobToolTasklet"></tasklet>
         </step>
     </job>
     

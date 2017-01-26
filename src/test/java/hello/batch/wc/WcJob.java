@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.hadoop.batch.mapreduce.JarTasklet;
+import org.springframework.data.hadoop.batch.mapreduce.ToolTasklet;
 
 import hello.batch.JobConfigurationBase;
 import hello.util.FsUtil;
@@ -32,16 +32,20 @@ public class WcJob extends JobConfigurationBase {
 	private WordCountFolderUtil wordCountFolderUtil;
 	
 	@Autowired
+	private org.apache.hadoop.conf.Configuration configuration;
+	
+	@Autowired
 	private FsUtil fsUtil;
 	
-    @Bean("WcJobJarTasklet")
+    @Bean("WcJobToolTasklet")
     @StepScope
-    public JarTasklet jarTasklet(@Value("#{jobParameters['jar']}") String jarFile, @Value("#{jobParameters['inputFolder']}") String inputFolder, @Value("#{jobParameters['outputFolder']}") String outputFolder, @Value("#{jobParameters['mainClass']}") String mainClass) {
-    	JarTasklet jt = new JarTasklet();
-    	jt.setJar(fsUtil.localFileAsResource(jarFile));
-    	jt.setArguments(inputFolder, outputFolder);
-    	jt.setMainClass(mainClass);
-    	return jt;
+    public ToolTasklet toolTasklet(@Value("#{jobParameters['jar']}") String jarFile, @Value("#{jobParameters['inputFolder']}") String inputFolder, @Value("#{jobParameters['outputFolder']}") String outputFolder, @Value("#{jobParameters['mainClass']}") String mainClass) {
+    	ToolTasklet tt = new ToolTasklet();
+    	tt.setJar(fsUtil.localFileAsResource(jarFile));
+    	tt.setArguments(inputFolder, outputFolder);
+    	tt.setToolClass(mainClass);
+    	tt.setConfiguration(configuration);
+    	return tt;
     }
     
     @Bean("copyFileTasklet")

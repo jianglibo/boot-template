@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import com.sun.nio.file.SensitivityWatchEventModifier;
+//import com.sun.nio.file.SensitivityWatchEventModifier;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 
@@ -47,68 +47,68 @@ public class DiskMonitor {
 	@Autowired
 	private ThreadPoolTaskExecutor watcherExecutor;
 	
-    public void startRecursiveWatcher() throws IOException {
-        LOG.info("Starting Recursive Watcher");
-
-		WatchService watcher = FileSystems.getDefault().newWatchService();
-        final Map<WatchKey, Path> keys = new HashMap<>();
-
-        Consumer<Path> register = p -> {
-            if (!p.toFile().exists() || !p.toFile().isDirectory()) {
-                throw new RuntimeException("folder " + p + " does not exist or is not a directory");
-            }
-            try {
-                Files.walkFileTree(p, new SimpleFileVisitor<Path>() {
-                    @Override
-                    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                        LOG.info("registering " + dir + " in watcher service");
-                        WatchKey watchKey = dir.register(watcher, new WatchEvent.Kind[]{ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY}, SensitivityWatchEventModifier.HIGH);
-                        keys.put(watchKey, dir);
-                        return FileVisitResult.CONTINUE;
-                    }
-                });
-            } catch (IOException e) {
-                throw new RuntimeException("Error registering path " + p);
-            }
-        };
-        
-        register.accept(Paths.get("c:"));
-        
-        watcherExecutor.submit(() -> {
-            while (true) {
-                final WatchKey key;
-                try {
-                    key = watcher.take(); // wait for a key to be available
-                } catch (InterruptedException ex) {
-                    return;
-                }
-
-                final Path dir = keys.get(key);
-                if (dir == null) {
-                    System.err.println("WatchKey " + key + " not recognized!");
-                    continue;
-                }
-
-                key.pollEvents().stream()
-                        .filter(e -> (e.kind() != OVERFLOW))
-                        .map(e -> ((WatchEvent<Path>) e).context())
-                        .forEach(p -> {
-                            final Path absPath = dir.resolve(p);
-                            if (absPath.toFile().isDirectory()) {
-                                register.accept(absPath);
-                            } else {
-                                final File f = absPath.toFile();
-                                LOG.info("Detected new file " + f.getAbsolutePath());
-                            }
-                        });
-
-                boolean valid = key.reset(); // IMPORTANT: The key must be reset after processed
-                if (!valid) {
-                    break;
-                }
-            }
-        });
-    }
+//    public void startRecursiveWatcher() throws IOException {
+//        LOG.info("Starting Recursive Watcher");
+//
+//		WatchService watcher = FileSystems.getDefault().newWatchService();
+//        final Map<WatchKey, Path> keys = new HashMap<>();
+//
+//        Consumer<Path> register = p -> {
+//            if (!p.toFile().exists() || !p.toFile().isDirectory()) {
+//                throw new RuntimeException("folder " + p + " does not exist or is not a directory");
+//            }
+//            try {
+//                Files.walkFileTree(p, new SimpleFileVisitor<Path>() {
+//                    @Override
+//                    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+//                        LOG.info("registering " + dir + " in watcher service");
+//                        WatchKey watchKey = dir.register(watcher, new WatchEvent.Kind[]{ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY}, SensitivityWatchEventModifier.HIGH);
+//                        keys.put(watchKey, dir);
+//                        return FileVisitResult.CONTINUE;
+//                    }
+//                });
+//            } catch (IOException e) {
+//                throw new RuntimeException("Error registering path " + p);
+//            }
+//        };
+//        
+//        register.accept(Paths.get("c:"));
+//        
+//        watcherExecutor.submit(() -> {
+//            while (true) {
+//                final WatchKey key;
+//                try {
+//                    key = watcher.take(); // wait for a key to be available
+//                } catch (InterruptedException ex) {
+//                    return;
+//                }
+//
+//                final Path dir = keys.get(key);
+//                if (dir == null) {
+//                    System.err.println("WatchKey " + key + " not recognized!");
+//                    continue;
+//                }
+//
+//                key.pollEvents().stream()
+//                        .filter(e -> (e.kind() != OVERFLOW))
+//                        .map(e -> ((WatchEvent<Path>) e).context())
+//                        .forEach(p -> {
+//                            final Path absPath = dir.resolve(p);
+//                            if (absPath.toFile().isDirectory()) {
+//                                register.accept(absPath);
+//                            } else {
+//                                final File f = absPath.toFile();
+//                                LOG.info("Detected new file " + f.getAbsolutePath());
+//                            }
+//                        });
+//
+//                boolean valid = key.reset(); // IMPORTANT: The key must be reset after processed
+//                if (!valid) {
+//                    break;
+//                }
+//            }
+//        });
+//    }
 	
 	public void d() throws IOException {
 		WatchService watcher = FileSystems.getDefault().newWatchService();

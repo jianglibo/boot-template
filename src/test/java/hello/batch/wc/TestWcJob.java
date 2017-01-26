@@ -53,7 +53,7 @@ public class TestWcJob extends TbatchBase {
 		wordCountFolderUtil.clearFolder();
 		localWcTxt = Paths.get(BATCH_FIXTURE_BASE, "wc.txt");
 		if (!Files.exists(localWcTxt)) {
-			throw new RuntimeException("Please invoke command in project root folder, like this: '. .\\randomword.ps1 -DstFile .\\src\test\\resources\\fixtnotingit\\wc.txt -UniqueWordNumber 1000 -TotalWordNumber 1000000 -MaxWordsPerLine 23'");
+			throw new RuntimeException("Please invoke command in project root folder, like this: '. .\\randomword.ps1 -DstFile .\\src\\test\\resources\\fixtnotingit\\wc.txt -UniqueWordNumber 1000 -TotalWordNumber 1000000 -MaxWordsPerLine 23'");
 		}
 		localWcJar = Paths.get("mrjars", "wc.jar");
 		if (!Files.exists(localWcJar)) {

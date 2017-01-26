@@ -20,6 +20,7 @@ public class WordCount2 extends Configured implements Tool {
 	public static void main(String[] args) throws Exception {
 			int ret;
 			try {
+				// new Configuration() is the source of error. because it knows nothing about configuration out side the application. But spring hadoop configuration do.
 				ret = ToolRunner.run(new Configuration(), new WordCount2(), args);
 			} catch (Exception e) {
 				e.printStackTrace();

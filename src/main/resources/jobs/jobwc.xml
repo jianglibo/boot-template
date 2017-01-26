@@ -12,11 +12,11 @@
 
 	<beans:bean class="org.springframework.batch.core.launch.support.RunIdIncrementer" scope="job" id="runIdIncrementerXml"></beans:bean>
 
-    <job id="wcjobXml" incrementer="runIdIncrementerXml">
-        <step id="wc-step-copyfile" next="wc-step-runjar">
+    <job id="wcjobXml" incrementer="runIdIncrementerXml" restartable="true">
+        <step id="wc-step-copyfile" next="wc-step-runjar" allow-start-if-complete="true">
         	<tasklet ref="copyFileTasklet"></tasklet>
         </step>
-        <step id="wc-step-runjar">
+        <step id="wc-step-runjar" allow-start-if-complete="true">
         	<tasklet ref="WcJobJarTasklet"></tasklet>
         </step>
     </job>

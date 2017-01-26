@@ -18,7 +18,13 @@ import org.apache.hadoop.util.ToolRunner;
 public class WordCount2 extends Configured implements Tool {
 
 	public static void main(String[] args) throws Exception {
-		int ret = ToolRunner.run(new Configuration(), new WordCount2(), args);
+			int ret;
+			try {
+				ret = ToolRunner.run(new Configuration(), new WordCount2(), args);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw e;
+			}
 		System.exit(ret);
 	}
 

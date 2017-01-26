@@ -28,9 +28,9 @@ import hello.batch.JobConfigurationBase;
  */
 
 @Configuration
-public class NutchMkSeedFolderJob extends JobConfigurationBase {
+public class MKNutchBaseFolderJob extends JobConfigurationBase {
 	
-	private static final Logger log = LoggerFactory.getLogger(NutchMkSeedFolderJob.class);
+	private static final Logger log = LoggerFactory.getLogger(MKNutchBaseFolderJob.class);
 	
 
 	@Autowired

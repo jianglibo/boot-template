@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,9 +48,18 @@ public class WordCountFolderUtil {
 	@Autowired
 	private FileSystem fs;
 	
+	/**
+	 * Before hadoop job starts, output folder must not exists. 
+	 * @throws IOException
+	 */
 	public void initFolder() throws IOException {
 		fs.mkdirs(new Path(baseFolder, "in"));
-		fs.mkdirs(new Path(baseFolder, "out"));
+//		fs.mkdirs(new Path(baseFolder, "out"));
+	}
+
+	public void clearFolder() throws IOException {
+		fs.delete(new Path(baseFolder, "in"), true);
+		fs.delete(new Path(baseFolder, "out"), true);
 	}
 	
 	public void copyFilesToWc(String localFile) throws IOException {
@@ -96,9 +107,10 @@ public class WordCountFolderUtil {
 			Map<String, JobParameter> jpmap = Maps.newHashMap();
 			jpmap.put("localFolder", localFolder);
 			jpmap.put("jar", jar);
-			jpmap.put("inputFolder", new JobParameter("wc/in"));
-			jpmap.put("outputFolder", new JobParameter("wc/out"));
+			jpmap.put("inputFolder", new JobParameter(fsUtil.convertToFullUserPath("wc/in")));
+			jpmap.put("outputFolder", new JobParameter(fsUtil.convertToFullUserPath("wc/out")));
 			jpmap.put("mainClass", mainClass);
+			jpmap.put("startTime", new JobParameter(Date.from(Instant.now()))); // distinguish jobs.
 			return new JobParameters(jpmap);
 		}
 

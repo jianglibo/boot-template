@@ -61,7 +61,7 @@ spring:
 #                defaultFS: hdfs://localhost:8020
         fsshell:
             enabled: false
-    nutchSeeds: nutchSeeds 
+    nutchBaseFolder: nutch 
 management:
     security:
         enabled: false

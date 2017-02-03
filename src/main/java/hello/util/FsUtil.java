@@ -6,12 +6,15 @@ import java.nio.file.Paths;
 
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.permission.FsAction;
+import org.apache.hadoop.fs.permission.FsPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
+import com.google.common.base.Strings;
 import com.google.common.io.ByteStreams;
 
 @Component
@@ -69,6 +72,17 @@ public class FsUtil {
 		return remoteHadoopPath.toString();
 	}
 	
+	///tmp/hadoop-yarn/staging/admin/.staging
+	
+	public void grantStagingPermission(String user) throws IOException {
+		if (Strings.isNullOrEmpty(user)) {
+			user = System.getProperty("user.name");
+		}
+		fs.mkdirs(new org.apache.hadoop.fs.Path("/tmp"), FsPermission.getDirDefault());
+//		FsPermission fp = new FsPermission(FsAction.READ_WRITE, FsAction.READ_WRITE, FsAction.READ_WRITE);
+//		fs.setPermission(new org.apache.hadoop.fs.Path("/tmp"), FsPermission.getDirDefault());
+	}
+	
 	/**
 	 * 
 	 * @param baseFolder the remote folder to copy to.
@@ -81,8 +95,4 @@ public class FsUtil {
 		org.apache.hadoop.fs.Path remoteHadoopPath = new org.apache.hadoop.fs.Path(baseFolder, localJavaPath.getFileName().toString());
 		fs.copyFromLocalFile(localHadoopPath, remoteHadoopPath);
 	}
-
-
-
-
 }

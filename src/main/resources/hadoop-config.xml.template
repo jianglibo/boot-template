@@ -11,7 +11,9 @@
  
 <!--    <hdp:configuration/>  -->
 <!--    resources="file:///E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/core-site.xml,file:///E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/hdfs-site.xml,file:///E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/mapred-site.xml,file:///E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/yarn-site.xml"  -->
-   	<configuration resources="file:/E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/core-site.xml,file:/E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/hdfs-site.xml,file:/E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/mapred-site.xml,file:/E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/yarn-site.xml">
+
+<!-- resources effect job environment. -->
+   	<configuration resources="file:///E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/core-site.xml,file:///E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/hdfs-site.xml,file:///E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/mapred-site.xml,file:///E:/configuratedHadoopFolder/hadoop-2.7.3/etc/hadoop/yarn-site.xml">
 		fs.defaultFS=${spring.hadoop.fsUri}
 	</configuration>
 	

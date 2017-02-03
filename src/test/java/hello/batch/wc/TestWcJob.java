@@ -60,6 +60,7 @@ public class TestWcJob extends TbatchBase {
 			throw new RuntimeException(localWcJar.toAbsolutePath().normalize().toString() + " doesn't exists. Pleas follow the README.md in project root to build jar first.");
 		}
 		wordCountFolderUtil.initFolder();
+//		fsUtil.grantStagingPermission(null);
 	}
 	
 	@After

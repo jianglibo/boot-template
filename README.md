@@ -10,6 +10,9 @@ powershell: setx spring.profiles.active dev
 Get-Item env:java_home
 jar cf mrjars\xx.jar hello\hadoopwc\mrcode\*.class
 jar cf .\mrjars\wc.jar .\bin\hello\hadoopwc\mrcode\*.class
+cd .\bin
+
+jar cf ..\mrjars\wc.jar .\hello\hadoopwc\mrcode\*.class
 
 ## java.lang.UnsatisfiedLinkError: org.apache.hadoop.io.nativeio.NativeIO$Windows.access0(Ljava/lang/String;I)Z
 run winutilcopy.ps1

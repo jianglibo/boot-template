@@ -7,6 +7,8 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import hello.util.FsUtil;
+
 public class JobConfigurationBase {
 
     @Autowired
@@ -20,4 +22,10 @@ public class JobConfigurationBase {
 
     @Autowired
     protected DataSource dataSource;
+    
+    @Autowired
+    protected FsUtil fsUtil;
+    
+	@Autowired
+	protected org.apache.hadoop.conf.Configuration configuration;
 }

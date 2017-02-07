@@ -25,3 +25,4 @@ gradle-app.setting
 application.yaml
 mrjars/
 hadoop-config.xml
+jobproperties/**/*.job

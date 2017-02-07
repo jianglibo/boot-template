@@ -1,0 +1,23 @@
+<beans:beans xmlns="http://www.springframework.org/schema/batch"
+     xmlns:beans="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:hdp="http://www.springframework.org/schema/hadoop"
+     xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/hadoop
+    	   http://www.springframework.org/schema/hadoop/spring-hadoop.xsd
+           http://www.springframework.org/schema/batch
+           http://www.springframework.org/schema/batch/spring-batch-2.2.xsd">
+
+	<beans:bean class="org.springframework.batch.core.launch.support.RunIdIncrementer" scope="job" id="runIdIncrementerXml"></beans:bean>
+
+    <job id="nutchcrawl" incrementer="runIdIncrementerXml" restartable="true">
+        <step id="nutch-copy-seed" next="nutch-init-inject">
+        	<tasklet start-limit="1" ref="copySeedTasklet"></tasklet>
+        </step>
+        <step id="nutch-init-inject">
+        	<tasklet ref="nutchInjectToolTasklet"></tasklet>
+        </step>
+    </job>
+</beans:beans>

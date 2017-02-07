@@ -8,7 +8,10 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -20,6 +23,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
+import org.springframework.batch.core.JobParameter;
+import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.explore.JobExplorer;
@@ -32,6 +37,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
 
@@ -199,5 +205,11 @@ public class TbatchBase extends Tbase {
 
 	public void setJobName(String jobName) {
 		this.jobName = jobName;
+	}
+	
+	public JobParameters withCurrentTime() {
+		Map<String, JobParameter> map = Maps.newHashMap();
+		map.put("currentTime", new JobParameter(Date.from(Instant.now())));
+		return new JobParameters(map);
 	}
 }

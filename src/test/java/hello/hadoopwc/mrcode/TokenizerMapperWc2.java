@@ -35,8 +35,8 @@ public class TokenizerMapperWc2  extends Mapper<Object, Text, Text, IntWritable>
 	@Override
 	public void setup(Context context) throws IOException, InterruptedException {
 		conf = context.getConfiguration();
-		caseSensitive = conf.getBoolean("wordcount.case.sensitive", true);
-		if (conf.getBoolean("wordcount.skip.patterns", true)) {
+		caseSensitive = conf.getBoolean("wordcount.case.sensitive", false); //true
+		if (conf.getBoolean("wordcount.skip.patterns", false)) { //true
 			URI[] patternsURIs = Job.getInstance(conf).getCacheFiles();
 			for (URI patternsURI : patternsURIs) {
 				Path patternsPath = new Path(patternsURI.getPath());

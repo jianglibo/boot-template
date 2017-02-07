@@ -6,7 +6,6 @@ import java.nio.file.Paths;
 
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.permission.FsAction;
 import org.apache.hadoop.fs.permission.FsPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +27,22 @@ public class FsUtil {
 	
 	@Autowired
 	private ApplicationContext applicationContext;
+	
+	@Autowired
+	private org.apache.hadoop.conf.Configuration configuration;
+	
+	public FileSystem getOrCreate() throws IOException {
+		try {
+			fs.listFiles(new org.apache.hadoop.fs.Path("/"), false);
+		} catch (Exception e) {
+			fs = FileSystem.newInstance(configuration);
+		}
+		return fs;
+	}
+	
+	public FileSystem getFs() {
+		return fs;
+	}
 
 
 	public String getFileContent(org.apache.hadoop.fs.Path hdpath) throws IOException {

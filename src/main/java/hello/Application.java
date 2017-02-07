@@ -1,8 +1,6 @@
 package hello;
 
 import java.io.IOException;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 
 import javax.sql.DataSource;
 
@@ -11,31 +9,25 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.core.scope.JobScope;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.data.hadoop.fs.DistCp;
+import org.springframework.data.hadoop.hbase.HbaseTemplate;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import hello.util.WordCountFolderUtil;
-import hello.util.SecurityUtil;
+import com.google.inject.name.Named;
 
 @SpringBootApplication
 @EnableSpringDataWebSupport
@@ -80,8 +72,14 @@ public class Application {
         return DataSourceBuilder.create().build();
     }
     
-    @Bean("fsForApi")
-    public FileSystem hdFileSystem() throws IOException {
+    @Bean
+    public HbaseTemplate htemplate(@Named("hbaseConfiguration") org.apache.hadoop.conf.Configuration configuration) {
+    	HbaseTemplate ht = new HbaseTemplate(configuration);
+    	return ht;
+    }
+    
+    @Bean
+    public FileSystem fs() throws IOException {
     	FileSystem fs = FileSystem.get(configuration);
     	return fs;
     }

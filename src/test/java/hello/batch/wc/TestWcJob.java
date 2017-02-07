@@ -5,10 +5,10 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
 
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.batch.core.BatchStatus;
@@ -63,9 +63,13 @@ public class TestWcJob extends TbatchBase {
 //		fsUtil.grantStagingPermission(null);
 	}
 	
-	@After
-	public void a() throws IOException {
-		wordCountFolderUtil.clearFolder();
+//	@After
+//	public void a() throws IOException {
+//	}
+//	@Test
+	public void td() {
+		Date d = Date.from(Instant.now());
+		String s = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(d) + ".txt";
 	}
 	
 	@Test
@@ -73,6 +77,8 @@ public class TestWcJob extends TbatchBase {
 		Job jb1 = jobRegistry.getJob(getJobName());
 		JobParameters jps = wordCountFolderUtil.newJobParametersBuilder().jar(localWcJar.toAbsolutePath().normalize().toString()).localFolder(localWcTxt.toAbsolutePath().normalize().toString()).mainClass(WordCount2.class.getName()).build();
 		JobExecution je1 = syncJobLauncher.run(jb1, jps);
+		wordCountFolderUtil.copyOutToLocal();
+		wordCountFolderUtil.clearFolder();
 		assertTrue("status should be compeleted", je1.getStatus() == BatchStatus.COMPLETED);
 	}
 

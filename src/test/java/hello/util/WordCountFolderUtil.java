@@ -1,9 +1,12 @@
 package hello.util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -11,8 +14,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.RemoteIterator;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +27,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.beust.jcommander.internal.Maps;
+import com.google.common.io.ByteStreams;
 
 /**
  * For wc jobs we have a convention, under the baseFolder there have two folders named in and out.
@@ -45,21 +52,30 @@ public class WordCountFolderUtil {
 	@Autowired
 	private org.apache.hadoop.conf.Configuration configuration;
 	
-	@Autowired
-	private FileSystem fs;
+	// because of filesystem Cache, fs and secondFs are actually same.
+//	@Autowired
+//	private FileSystem fs;
+	
+//	@Autowired
+//	@Qualifier("secondFs")
+//	private FileSystem secondFs;
+
+	
+	@Value("${myapp.mapredout}")
+	private String mapredout;
 	
 	/**
 	 * Before hadoop job starts, output folder must not exists. 
 	 * @throws IOException
 	 */
 	public void initFolder() throws IOException {
-		fs.mkdirs(new Path(baseFolder, "in"));
+		fsUtil.getFs().mkdirs(new Path(baseFolder, "in"));
 //		fs.mkdirs(new Path(baseFolder, "out"));
 	}
 
 	public void clearFolder() throws IOException {
-		fs.delete(new Path(baseFolder, "in"), true);
-		fs.delete(new Path(baseFolder, "out"), true);
+		fsUtil.getFs().delete(new Path(baseFolder, "in"), true);
+		fsUtil.getFs().delete(new Path(baseFolder, "out"), true);
 	}
 	
 	public void copyFilesToWc(String localFile) throws IOException {
@@ -71,6 +87,24 @@ public class WordCountFolderUtil {
 			}
 		} else {
 			fsUtil.copyFromLocalFile("wc/in", localFile);
+		}
+	}
+	
+	public void copyOutToLocal() throws FileNotFoundException, IllegalArgumentException, IOException {
+		RemoteIterator<LocatedFileStatus> ri = fsUtil.getOrCreate().listFiles(new Path("wc/out"), false);
+		while(ri.hasNext()) {
+			LocatedFileStatus lfs = ri.next();
+			if (lfs.getPath().getName().matches("^part-r-.*")) {
+				FSDataInputStream fsis = fsUtil.getFs().open(lfs.getPath());
+				java.nio.file.Path path = Paths.get(mapredout);
+				if (!Files.exists(path)) {
+					Files.createDirectories(path);
+				}
+				Date d = Date.from(Instant.now());
+				File out = path.resolve(new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(d) + ".txt").toFile();
+				ByteStreams.copy(fsis, new FileOutputStream(out));
+				fsis.close();
+			}
 		}
 	}
 

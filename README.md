@@ -26,3 +26,14 @@ JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,HADOOP_YARN_HOME
 /user/admin
 /tmp/hadoop-yarn/staging/admin
 /tmp/hadoop-yarn/staging/history/done_intermediate
+
+## conf.set("mapreduce.app-submission.cross-platform", "true");
+
+<property>
+  <description>If enabled, user can submit an application cross-platform
+  i.e. submit an application from a Windows client to a Linux/Unix server or
+  vice versa.
+  </description>
+  <name>mapreduce.app-submission.cross-platform</name>
+  <value>false</value>
+</property>

@@ -91,19 +91,21 @@ public class WordCountFolderUtil {
 	}
 	
 	public void copyOutToLocal() throws FileNotFoundException, IllegalArgumentException, IOException {
-		RemoteIterator<LocatedFileStatus> ri = fsUtil.getOrCreate().listFiles(new Path("wc/out"), false);
-		while(ri.hasNext()) {
-			LocatedFileStatus lfs = ri.next();
-			if (lfs.getPath().getName().matches("^part-r-.*")) {
-				FSDataInputStream fsis = fsUtil.getFs().open(lfs.getPath());
-				java.nio.file.Path path = Paths.get(mapredout);
-				if (!Files.exists(path)) {
-					Files.createDirectories(path);
+		if (fsUtil.getOrCreate().exists(new Path("wc/out"))) {
+			RemoteIterator<LocatedFileStatus> ri = fsUtil.getOrCreate().listFiles(new Path("wc/out"), false);
+			while(ri.hasNext()) {
+				LocatedFileStatus lfs = ri.next();
+				if (lfs.getPath().getName().matches("^part-r-.*")) {
+					FSDataInputStream fsis = fsUtil.getFs().open(lfs.getPath());
+					java.nio.file.Path path = Paths.get(mapredout);
+					if (!Files.exists(path)) {
+						Files.createDirectories(path);
+					}
+					Date d = Date.from(Instant.now());
+					File out = path.resolve(new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(d) + ".txt").toFile();
+					ByteStreams.copy(fsis, new FileOutputStream(out));
+					fsis.close();
 				}
-				Date d = Date.from(Instant.now());
-				File out = path.resolve(new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(d) + ".txt").toFile();
-				ByteStreams.copy(fsis, new FileOutputStream(out));
-				fsis.close();
 			}
 		}
 	}

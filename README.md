@@ -27,6 +27,10 @@ JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,HADOOP_YARN_HOME
 /tmp/hadoop-yarn/staging/admin
 /tmp/hadoop-yarn/staging/history/done_intermediate
 
+## nutch plugins zip dir to "plugins" in stead of "classes/plugins".
+
+modify build.xml in nutch project.
+
 ## conf.set("mapreduce.app-submission.cross-platform", "true");
 
 <property>
@@ -37,3 +41,7 @@ JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,HADOOP_YARN_HOME
   <name>mapreduce.app-submission.cross-platform</name>
   <value>false</value>
 </property>
+
+## hbase shell
+list
+scan table

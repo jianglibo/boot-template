@@ -109,6 +109,19 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.data/spring-data-hadoop-store
 	compile group: 'org.springframework.data', name: 'spring-data-hadoop-store', version: '2.4.0.RELEASE'
     
+    // https://mvnrepository.com/artifact/org.apache.gora/gora-core
+//	compile( group: 'org.apache.gora', name: 'gora-core', version: '0.6.1') {
+//		exclude group: "org.slf4j", module: "slf4j-simple"
+//		exclude group: "org.slf4j", module: "slf4j-log4j12"
+//	}
+	
+	// https://mvnrepository.com/artifact/com.argonio.gora/gora-hbase
+//	compile( group: 'com.argonio.gora', name: 'gora-hbase', version: '0.5.3') {
+//		exclude group: "org.slf4j", module: "slf4j-simple"
+//		exclude group: "org.slf4j", module: "slf4j-log4j12"
+//	}
+	
+     
 
     // https://mvnrepository.com/artifact/org.apache.hive/hive-jdbc
     compile group: 'org.apache.hive', name: 'hive-jdbc', version: '2.1.1'
@@ -138,7 +151,7 @@ dependencies {
 	compile 'org.springframework.data:spring-data-rest-hal-browser'
 	
 	// https://mvnrepository.com/artifact/org.apache.nutch/nutch
-	compile group: 'org.apache.nutch', name: 'nutch', version: '2.3.1'
+	// compile group: 'org.apache.nutch', name: 'nutch', version: '2.3.1'
 	
   	
     testCompile("org.springframework.boot:spring-boot-starter-test")

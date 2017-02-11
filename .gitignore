@@ -26,3 +26,4 @@ application.yaml
 mrjars/
 hadoop-config.xml
 jobproperties/**/*.job
+jobproperties/libs/

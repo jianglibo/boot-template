@@ -12,12 +12,27 @@
 
 	<beans:bean class="org.springframework.batch.core.launch.support.RunIdIncrementer" scope="job" id="runIdIncrementerXml"></beans:bean>
 
-    <job id="nutchcrawl" incrementer="runIdIncrementerXml" restartable="true">
+    <job id="nutch-inject" incrementer="runIdIncrementerXml" restartable="true">
         <step id="nutch-copy-seed" next="nutch-init-inject">
         	<tasklet start-limit="1" ref="copySeedTasklet"></tasklet>
         </step>
         <step id="nutch-init-inject">
         	<tasklet ref="nutchInjectToolTasklet"></tasklet>
+        </step>
+    </job>
+    
+    <job id="nutch-crawl" incrementer="runIdIncrementerXml" restartable="true">
+        <step id="nutch-generate-step" next="nutch-fetching-step">
+        	<tasklet ref="nutchGenerateToolTasklet"></tasklet>
+        </step>
+        <step id="nutch-fetching-step" next="nutch-parsing-step">
+        	<tasklet ref="nutchFetchToolTasklet"></tasklet>
+        </step>
+        <step id="nutch-parsing-step" next="nutch-updatedb-step">
+        	<tasklet ref="nutchParseToolTasklet"></tasklet>
+        </step>
+        <step id="nutch-updatedb-step">
+        	<tasklet ref="nutchUpdateDbToolTasklet"></tasklet>
         </step>
     </job>
 </beans:beans>

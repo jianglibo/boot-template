@@ -59,7 +59,16 @@ public class NutchTasklets  extends JobConfigurationBase {
     }
     
 //  commonOptions="-D mapred.reduce.tasks=$numTasks -D mapred.child.java.opts=-Xmx1000m -D mapred.reduce.tasks.speculative.execution=false -D mapred.map.tasks.speculative.execution=false -D mapred.compress.map.output=true"
-    
+    /**
+     * If the job returns 1, means no new segments created. If return 0, that's ok.
+     * @param crawlId
+     * @param numSlaves
+     * @param addDays
+     * @param debug
+     * @param batchId
+     * @return
+     * @throws IOException
+     */
     @Bean("nutchGenerateToolTasklet")
     @StepScope
     public ToolTasklet nutchGenerateToolTasklet(@Value("#{jobParameters['crawlId']}") String crawlId

@@ -22,8 +22,13 @@
     </job>
     
     <job id="nutch-crawl" incrementer="runIdIncrementerXml" restartable="true">
-        <step id="nutch-generate-step" next="nutch-fetching-step">
+        <step id="nutch-generate-step">
         	<tasklet ref="nutchGenerateToolTasklet"></tasklet>
+        	<end on="FAILD"/>
+        	<next on="*" to="nutch-fetching-step"/>
+        	<listeners>
+        		<listener ref="generateStepExecutionListener"></listener>
+        	</listeners>
         </step>
         <step id="nutch-fetching-step" next="nutch-parsing-step">
         	<tasklet ref="nutchFetchToolTasklet"></tasklet>
@@ -34,5 +39,10 @@
         <step id="nutch-updatedb-step">
         	<tasklet ref="nutchUpdateDbToolTasklet"></tasklet>
         </step>
+<!--         
+        <step id="end-tasklet">
+        	<tasklet ref="endTasklet"></tasklet>
+        </step>
+-->
     </job>
 </beans:beans>

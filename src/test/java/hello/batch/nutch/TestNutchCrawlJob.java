@@ -19,7 +19,6 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import hello.TbatchBase;
-import hello.util.NutchFolderUtil;
 
 public class TestNutchCrawlJob extends TbatchBase {
 	
@@ -27,6 +26,8 @@ public class TestNutchCrawlJob extends TbatchBase {
 	private NutchFolderUtil nutchFolderUtil;
 	
 	private String crawlId = "fhgov";
+	
+	private String batchId = "1486710034-46874";
 	
 	public TestNutchCrawlJob() {
 		super(NutchTaskNames.NUTCH_CRAWL);
@@ -52,11 +53,12 @@ public class TestNutchCrawlJob extends TbatchBase {
 				.newCrawJobParameterBuilder()
 				.withCommonJobParameterBuilder()
 				.crawlId(crawlId)
-				.batchId(nutchFolderUtil.getRandomBatchId())
+				.batchId(batchId)
 				.numSlaves(3)
 				.and()
 				.withGenerateParameterBuilder()
 				.addDays(35L)
+				.forceFetch()
 				.and()
 				.withFetchParameterBuilder()
 				.threads(50L)
@@ -69,6 +71,7 @@ public class TestNutchCrawlJob extends TbatchBase {
 				.withUpdateDbParameterBuilder()
 				.and()
 				.build());
+		// Because had not called addTimeStamp(), and batchId is the same, So success steps will not get executed again. 
 		assertTrue("status should be compeleted", je1.getStatus() == BatchStatus.COMPLETED);
 	}
 }

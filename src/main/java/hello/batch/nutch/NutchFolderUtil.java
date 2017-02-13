@@ -1,4 +1,4 @@
-package hello.util;
+package hello.batch.nutch;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +27,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import com.beust.jcommander.internal.Maps;
+
+import hello.util.FsUtil;
 
 /**
  * For nutch jobs we have a convention, under the baseFolder there have a folder named seeds.
@@ -244,6 +246,7 @@ public class NutchFolderUtil {
 		
 		public GenerateJobParametersBuilder(CrawJobParameterBuilder combinedBuilder) {
 			this.combinedBuilder = combinedBuilder;
+			this.combinedBuilder.addParameter(NutchTasklets.Constants.FORCE_FETCH, new JobParameter(0L));
 		}
 		
 		public CrawJobParameterBuilder and() {
@@ -252,6 +255,11 @@ public class NutchFolderUtil {
 
 		public GenerateJobParametersBuilder addDays(long addDays) {
 			this.combinedBuilder.addParameter("addDays", new JobParameter(addDays));
+			return this;
+		}
+		
+		public GenerateJobParametersBuilder forceFetch() {
+			this.combinedBuilder.addParameter(NutchTasklets.Constants.FORCE_FETCH, new JobParameter(1L));
 			return this;
 		}
 	}

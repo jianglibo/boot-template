@@ -1,0 +1,49 @@
+<beans:beans xmlns="http://www.springframework.org/schema/batch"
+     xmlns:beans="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:hdp="http://www.springframework.org/schema/hadoop"
+     xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/hadoop
+    	   http://www.springframework.org/schema/hadoop/spring-hadoop.xsd
+           http://www.springframework.org/schema/batch
+           http://www.springframework.org/schema/batch/spring-batch-2.2.xsd">
+    
+    <!-- 
+    	<end on="FAILED"/> is count on BatchStatus, not on ExistStatus
+    	<step on="xx"> is count on ExistStatus.
+     -->
+     
+    <job id="batch-learning" restartable="true">
+        <step id="learning-step-1">
+        	<tasklet ref="stepOneTaskletSuccess"></tasklet>
+        	<end on="FAILED"/>
+        	<next on="*" to="learning-step-2"/>
+        	<listeners>
+        		<listener ref="learningStepExecutionListener"></listener>
+        	</listeners>
+        </step>
+        <step id="learning-step-2" next="learning-step-3">
+        	<tasklet ref="stepTwoTasklet"></tasklet>
+        </step>
+        <step id="learning-step-3">
+        	<tasklet ref="stepThreeTasklet"></tasklet>
+        </step>
+    </job>
+    
+    <job id="batch-learning-2" restartable="true">
+        <step id="learning-step-1-1" next="learning-step-2-1">
+        	<tasklet ref="stepOneTaskletSuccess"></tasklet>
+        	<listeners>
+        		<listener ref="learningStepExecutionListener"></listener>
+        	</listeners>
+        </step>
+        <step id="learning-step-2-1" next="learning-step-3-1">
+        	<tasklet ref="stepTwoTasklet"></tasklet>
+        </step>
+        <step id="learning-step-3-1">
+        	<tasklet ref="stepThreeTasklet"></tasklet>
+        </step>
+    </job>
+</beans:beans>

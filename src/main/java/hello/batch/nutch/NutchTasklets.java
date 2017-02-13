@@ -2,8 +2,15 @@ package hello.batch.nutch;
 
 import java.io.IOException;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -15,12 +22,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.hadoop.batch.mapreduce.ToolTasklet;
 
 import hello.batch.JobConfigurationBase;
-import hello.util.NutchFolderUtil;
 
 //https://wiki.apache.org/nutch/Nutch2Crawling
 	
 @Configuration
 public class NutchTasklets  extends JobConfigurationBase {
+	
+	private static Logger log = LoggerFactory.getLogger(NutchTasklets.class);
 	
 	@Autowired
 	private NutchFolderUtil nutchFolderUtil;
@@ -85,6 +93,42 @@ public class NutchTasklets  extends JobConfigurationBase {
     	tt.setConfiguration(nutchFolderUtil.getNutchConfiguration(crawlId));
     	tt.setProperties(commonProperties(numTasks, debug));
     	return tt;
+    }
+    
+    public static Pattern hadoopToolOutPattern = Pattern.compile(".*Hadoop tool[^0-9]+exit code:\\s*(\\d+).*");
+    
+    @Bean("generateStepExecutionListener")
+    @StepScope
+    public StepExecutionListener generateStepExecutionListener() {
+    	return new StepExecutionListener(){
+			@Override
+			public void beforeStep(StepExecution stepExecution) {
+			}
+
+//			StepExecution: id=262, version=1, 
+//			name=nutch-generate-step, status=FAILED, exitStatus=FAILED, readCount=0, filterCount=0,
+//			writeCount=0 readSkipCount=0, writeSkipCount=0, processSkipCount=0, commitCount=0, 
+//			rollbackCount=1, exitDescription=java.io.IOException: Hadoop tool failed with exit code: 1
+
+			@Override
+			public ExitStatus afterStep(StepExecution stepExecution) {
+				log.info("Step {} got exitCode with: {}", stepExecution.getStepName(), stepExecution.getExitStatus().getExitCode());
+				String exitDescription = stepExecution.getExitStatus().getExitDescription();
+				long forceFetch = stepExecution.getJobParameters().getLong(NutchTasklets.Constants.FORCE_FETCH);
+				if (exitDescription != null) {
+					Matcher m = hadoopToolOutPattern.matcher(exitDescription);
+					if (m.matches()) {
+						if ("1".equals(m.group(1))) {
+							if (forceFetch == 1) {
+								return new ExitStatus(NutchTasklets.Constants.FORCE_FETCH);
+							}
+						}
+					}
+				}
+				// force Spring batch framework seeing success.
+//				if (stepExecution.get)
+				return null;
+			}};
     }
     
     
@@ -170,6 +214,22 @@ public class NutchTasklets  extends JobConfigurationBase {
 				return RepeatStatus.FINISHED;
 			}
 		};
+    }
+    
+    @Bean("endTasklet")
+    @StepScope
+    public Tasklet endTasklet(@Value("#{jobParameters['crawlId']}") String crawlId) {
+    	return new Tasklet() {
+			@Override
+			public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+				return RepeatStatus.FINISHED;
+			}
+		};
+    }
+    
+    public static class Constants {
+    	public static final String FORCE_FETCH = "forceFetch";
+    	public static final String JOB_DEBUG = "debug";
     }
 
 }

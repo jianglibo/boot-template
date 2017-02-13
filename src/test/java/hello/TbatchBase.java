@@ -207,9 +207,29 @@ public class TbatchBase extends Tbase {
 		this.jobName = jobName;
 	}
 	
-	public JobParameters withCurrentTime() {
-		Map<String, JobParameter> map = Maps.newHashMap();
+	public TbatchBase withCurrentTime() {
 		map.put("currentTime", new JobParameter(Date.from(Instant.now())));
+		return this;
+	}
+	
+	public TbatchBase withKeyValue(String key, String value) {
+		map.put(key, new JobParameter(value));
+		return this;
+	}
+
+	public TbatchBase withKeyValue(String key, Long value) {
+		map.put(key, new JobParameter(value));
+		return this;
+	}
+	
+	public TbatchBase startJobParameters() {
+		map = Maps.newHashMap();
+		return this;
+	}
+	
+	Map<String, JobParameter> map = Maps.newHashMap();
+	
+	public JobParameters buildJobParameters() {
 		return new JobParameters(map);
 	}
 }

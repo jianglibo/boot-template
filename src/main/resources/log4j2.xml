@@ -9,5 +9,9 @@
     <Root level="error">
       <AppenderRef ref="Console"/>
     </Root>
+    
+    <Logger name="hello" level="debug">
+      <AppenderRef ref="Console"/>
+    </Logger>
   </Loggers>
 </Configuration>

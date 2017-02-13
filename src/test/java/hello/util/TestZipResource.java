@@ -9,6 +9,8 @@ import java.util.zip.ZipException;
 
 import org.junit.Test;
 
+import hello.batch.nutch.NutchFolderUtil;
+
 public class TestZipResource {
 	
 	@Test

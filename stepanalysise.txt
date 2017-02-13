@@ -1,0 +1,20 @@
+This is data in hbase after first injection.
+ROW                                                       COLUMN+CELL
+ cn.gov.fh.www:http/                                      column=f:bid, timestamp=1486710335300, value=1486710034-46874
+ cn.gov.fh.www:http/                                      column=f:fi, timestamp=1486709111000, value=\x00'\x8D\x00
+ cn.gov.fh.www:http/                                      column=f:ts, timestamp=1486709111000, value=\x00\x00\x01Z&\xC3i\xC5
+ cn.gov.fh.www:http/                                      column=mk:_gnmrk_, timestamp=1486710335300, value=1486710034-46874
+ cn.gov.fh.www:http/                                      column=mk:_injmrk_, timestamp=1486710335300, value=y
+ cn.gov.fh.www:http/                                      column=mk:dist, timestamp=1486710335300, value=0
+ cn.gov.fh.www:http/                                      column=mtdt:_csh_, timestamp=1486709111000, value=?\x80\x00\x00
+ cn.gov.fh.www:http/                                      column=s:s, timestamp=1486709111000, value=?\x80\x00\x00
+
+ referencing conf/gora-hbase-mapping.xml to understand to meaning of the fields.
+ bid -> batchId
+ fi -> fetchInterval
+ ts -> fetchTime
+ mk-> marker
+ mtdt -> metadata
+ 
+the batchId is essential, when one batchId had already marked an url, no other batchId will mark it again, this cause generate step to stop.
+So let's fix the batchId in testing.

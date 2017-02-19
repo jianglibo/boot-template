@@ -22,6 +22,8 @@ import org.springframework.data.hadoop.fs.DistCp;
 import org.springframework.data.hadoop.hbase.HbaseTemplate;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
@@ -35,6 +37,8 @@ import com.google.inject.name.Named;
 @EnableJpaRepositories(basePackages="hello.repository")
 @EnableWebMvc
 @EnableBatchProcessing
+@EnableAsync
+@EnableScheduling
 public class Application {
 
     public static void main(String[] args) {

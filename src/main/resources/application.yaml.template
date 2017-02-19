@@ -68,6 +68,7 @@ spring:
     nutch:
         baseFolder: nutch
         localBaseFolder: jobproperties
+        maxUnjarNumber: 6
 management:
     security:
         enabled: false

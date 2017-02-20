@@ -1,0 +1,16 @@
+RULE alter expandedJarClassPath behaving
+CLASS org.springframework.data.hadoop.mapreduce.ExecutionUtils
+METHOD expandedJarClassPath
+# if FailureTester has a method "doWrongState", it can be used in IF block.
+HELPER com.arjuna.wst11.messaging.engines.FailureTester
+AT ENTRY
+BIND jar:Resource = $1;
+IF traceln("entering expandedJarClassPath")
+   AND
+   true
+DO traceln("entering expandedJarClassPath");
+	debug("entering expandedJarClassPath")
+	return "xx";
+ENDRULE
+ 
+# let expandedJarClassPath executes as normal. but let "detectBaseDir" always return same value and "unjar" do nothing. jar parameter as a condition.

@@ -12,7 +12,7 @@ public class TestHadoopToolExitCode {
 	
 	@Test
 	public void t() {
-		String s = "StepExecution: id=262, version=1,name=nutch-generate-step, status=FAILED, exitStatus=FAILED, readCount=0, filterCount=0,writeCount=0 readSkipCount=0, writeSkipCount=0, processSkipCount=0, commitCount=0,rollbackCount=1, exitDescription=java.io.IOException: Hadoop tool failed with exit code: 1";
+		String s = "StepExecution: id=360, version=1, name=nutch-generate-step, status=FAILED, exitStatus=FAILED, readCount=0, filterCount=0, writeCount=0 readSkipCount=0, writeSkipCount=0, processSkipCount=0, commitCount=0, rollbackCount=1, exitDescription=java.io.IOException: Hadoop tool failed with exit code: 1\n	at org.springframework.data.hadoop.batch.mapreduce.ToolTasklet.execute(ToolTasklet.java:45)";
 		Matcher m = NutchTasklets.hadoopToolOutPattern.matcher(s);
 		assertTrue(m.matches());
 		assertThat(m.group(1), equalTo("1"));

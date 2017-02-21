@@ -13,5 +13,10 @@
     <Logger name="hello" level="debug">
       <AppenderRef ref="Console"/>
     </Logger>
+
+    <Logger name="org.apache.nutch.util" level="debug">
+      <AppenderRef ref="Console"/>
+    </Logger>
+
   </Loggers>
 </Configuration>

@@ -6,6 +6,7 @@ import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import hello.util.FsUtil;
 
@@ -28,4 +29,7 @@ public class JobConfigurationBase {
     
 	@Autowired
 	protected org.apache.hadoop.conf.Configuration configuration;
+
+	@Autowired
+	protected ApplicationContext applicationcontext;
 }

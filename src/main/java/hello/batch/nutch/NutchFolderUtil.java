@@ -31,6 +31,7 @@ import com.beust.jcommander.internal.Maps;
 import hello.util.FsUtil;
 
 /**
+ * org.apache.hadoop.util.RunJar create a custom classLoader to handle.
  * For nutch jobs we have a convention, under the baseFolder there have a folder named seeds.
  * @author Administrator
  *
@@ -67,10 +68,15 @@ public class NutchFolderUtil {
 	 * @throws IOException 
 	 */
 	public org.apache.hadoop.conf.Configuration getNutchConfiguration(String crawlId) throws IOException {
-		org.apache.hadoop.conf.Configuration c = new org.apache.hadoop.conf.Configuration(configuration);
-		c.addResource(getZipEntryInputstreamUnclosed(getNutchJobJar(crawlId), "nutch-default.xml"));
-		c.addResource(getZipEntryInputstreamUnclosed(getNutchJobJar(crawlId), "nutch-site.xml"));
-		return c;
+		return configuration;
+//		org.apache.hadoop.conf.Configuration c = new org.apache.hadoop.conf.Configuration(configuration);
+		// when in classloader phrase, these item should be used.
+//	    c.addResource("nutch-default.xml");
+//	    c.addResource("nutch-site.xml");
+	    // boot side.
+//		c.addResource(getZipEntryInputstreamUnclosed(getNutchJobJar(crawlId), "nutch-default.xml"));
+//		c.addResource(getZipEntryInputstreamUnclosed(getNutchJobJar(crawlId), "nutch-site.xml"));
+//		return c;
 	}
 	
 	public InputStream getZipEntryInputstreamUnclosed(String zipFile, String fn) throws IOException {
@@ -133,6 +139,15 @@ public class NutchFolderUtil {
 				fsUtil.copyFromLocalFile(rp.toString(), f.getAbsolutePath());
 			}
 		}
+	}
+	
+	public String copyJobJar(String crawlId) throws IOException {
+		Path rp = new Path(baseFolder, crawlId);
+		fs.mkdirs(rp);
+		java.nio.file.Path localPath = Paths.get(localBaseFolder, crawlId);
+		File file = Stream.of(localPath.toFile().listFiles()).filter(File::isFile).filter(f-> f.getName().matches(".*\\.job$")).findAny().get();
+		fsUtil.copyFromLocalFile(rp.toString(), file.getAbsolutePath());
+		return fsUtil.convertToFullUserPath(fsUtil.getRemoteFileURIString(rp.toString(),file.getName()));
 	}
 	
 	
@@ -220,6 +235,12 @@ public class NutchFolderUtil {
 			return combinedBuilder;
 		}
 		
+		public CommonJobParameterBuilder remoteJobJar(String jobJarUrl) {
+			combinedBuilder.addParameter("jobJarUrl", new JobParameter(jobJarUrl));
+			return this;
+		}
+
+		
 		public CommonJobParameterBuilder crawlId(String crawlId) {
 			combinedBuilder.addParameter("crawlId", new JobParameter(crawlId));
 			return this;
@@ -247,6 +268,7 @@ public class NutchFolderUtil {
 		public GenerateJobParametersBuilder(CrawJobParameterBuilder combinedBuilder) {
 			this.combinedBuilder = combinedBuilder;
 			this.combinedBuilder.addParameter(NutchTasklets.Constants.FORCE_FETCH, new JobParameter(0L));
+			this.combinedBuilder.addParameter("addDays", new JobParameter(0L));
 		}
 		
 		public CrawJobParameterBuilder and() {

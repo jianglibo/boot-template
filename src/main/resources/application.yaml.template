@@ -69,6 +69,8 @@ spring:
         baseFolder: nutch
         localBaseFolder: jobproperties
         maxUnjarNumber: 6
+        # from core-default.xml, property name is "hadoop.tmp.dir"
+        unjarFolder: D:/tmp/hadoop-admin
 management:
     security:
         enabled: false
@@ -78,11 +80,10 @@ multipart:
     enabled: false
 logging:
     level:
-        cc.openscanner: DEBUG
-        org.springframework.security.web.access: DEBUG
-        org.springframework.jdbc.core: DEBUG
-        org.springframework.batch: DEBUG
-        org.apache.hadoop.mapreduce: DEBUG
+#        org.springframework.security.web.access: DEBUG
+#        org.springframework.jdbc.core: DEBUG
+#        org.springframework.batch: DEBUG
+#        org.apache.hadoop.mapreduce: DEBUG
 myapp:
     dataWriteSourcePath: E:\OneDriver\OneDrive\浙江政务服务网
     mapredout: e:\mapredout

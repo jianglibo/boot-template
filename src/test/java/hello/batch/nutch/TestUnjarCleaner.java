@@ -26,7 +26,7 @@ public class TestUnjarCleaner {
 	@Before
 	public void b() throws IOException {
 		if (Files.exists(tp)) {
-			DirectoryDeleter.deleteRecursive(tp.toFile());
+			DirectoryDeleter.deleteRecursiveIgnoreFailed(tp.toFile());
 		}
 		Files.createDirectories(tp);
 		i = 0;
@@ -47,10 +47,11 @@ public class TestUnjarCleaner {
 	
 	@Test
 	public void t() throws IOException, InterruptedException {
+		String tmp = System.getProperty("java.io.tmpdir");
 		createAFile(5);
 		assertThat("there should be 5 files.",tp.toFile().list().length, equalTo(5) );
 		
-		UnjarCleaner uc = new UnjarCleaner();
+		UnjarCleanerPolling uc = new UnjarCleanerPolling();
 		uc.setMaxUnjarNumber(3);
 		List<File> files = uc.getOutDatedDirectory(tp);
 		assertThat("there should be 2 outdated files.",files.size(), equalTo(2));

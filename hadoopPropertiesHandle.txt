@@ -1,0 +1,4 @@
+trace in ToolTasklet code, you can found use provided properties will overwrite xml configuration.
+But will not add nutch-default.xml and nutch-site.xml configurations, just adding programlly. 
+
+org.springframework.data.hadoop.mapreduce.ExecutionUtils

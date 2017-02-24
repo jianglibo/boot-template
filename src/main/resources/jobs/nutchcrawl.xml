@@ -21,6 +21,13 @@
         </step>
     </job>
     
+     <job id="nutch-copy-jar" incrementer="runIdIncrementerXml" restartable="true">
+        <step id="nutch-copy-jobjar">
+         <tasklet ref="uploadNutchJobJarTasklet" allow-start-if-complete="true"></tasklet>
+        </step>
+    </job>
+    
+    
     <job id="nutch-crawl" incrementer="runIdIncrementerXml" restartable="true">
     <!-- 
         <step id="nutch-copy-jobjar" next="nutch-generate-step">
@@ -42,7 +49,8 @@
         <step id="nutch-parsing-step" next="nutch-updatedb-step">
         	<tasklet ref="nutchParseToolTasklet"></tasklet>
         </step>
-        <step id="nutch-updatedb-step" next="nutch-generate-step">
+        <!-- next="nutch-generate-step" -->
+        <step id="nutch-updatedb-step">
         	<tasklet ref="nutchUpdateDbToolTasklet"></tasklet>
         </step>
     </job>

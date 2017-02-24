@@ -45,3 +45,6 @@ modify build.xml in nutch project.
 ## hbase shell
 list
 scan table
+
+## classLoader leak
+https://www.dynatrace.com/resources/ebooks/javabook/class-loader-issues/

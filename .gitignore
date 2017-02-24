@@ -28,3 +28,4 @@ hadoop-config.xml
 jobproperties/**/*.job
 jobproperties/libs/
 /testtmp
+*.class

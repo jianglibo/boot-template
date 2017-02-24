@@ -73,36 +73,61 @@ public class TestNutchCrawlJob extends TbatchBase {
 				nutchFolderUtil.newCrawJobParameterBuilder()
 				.withCommonJobParameterBuilder()
 				.crawlId(crawlId)
+				.remoteJobJar(nutchFolderUtil.copyJobJar(crawlId))
 				.and()
 				.addTimeStamp()
 				.build());
-		
-		JobExecution je1 = syncJobLauncher.run(jb1, nutchFolderUtil
-				.newCrawJobParameterBuilder()
-				.withCommonJobParameterBuilder()
-//				.debug()
-				.crawlId(crawlId)
-				.batchId(batchId)
-//				.remoteJobJar(nutchFolderUtil.copyJobJar(crawlId))
-				.numSlaves(3)
-				.and()
-				.withGenerateParameterBuilder()
-//				.addDays(35L)
-				.forceFetch()
-				.and()
-				.withFetchParameterBuilder()
-				.threads(50L)
-				.timeLimitFetch(180L)
-				.and()
-				.withParseParameterBuilder()
-				.skipRecords(1L)
-				.startSkipping(2L)
-				.and()
-				.withUpdateDbParameterBuilder()
-				.and()
-				.addTimeStamp()
-				.build());
+		int maxRetries = 3;
+		int retries = 0;
+		JobExecution je1;
+		while(true) {
+			je1 = syncJobLauncher.run(jb1, nutchFolderUtil
+					.newCrawJobParameterBuilder()
+					.withCommonJobParameterBuilder()
+	//				.debug()
+					.crawlId(crawlId)
+					.batchId(batchId)
+					.remoteJobJar(nutchFolderUtil.copyJobJar(crawlId))
+					.numSlaves(3)
+					.and()
+					.withGenerateParameterBuilder()
+	//				.addDays(35L)
+					.forceFetch()
+					.and()
+					.withFetchParameterBuilder()
+					.threads(50L)
+					.timeLimitFetch(180L)
+					.and()
+					.withParseParameterBuilder()
+					.skipRecords(1L)
+					.startSkipping(2L)
+					.and()
+					.withUpdateDbParameterBuilder()
+					.and()
+					.addTimeStamp()
+					.build());
+			if (je1.getStatus() == BatchStatus.COMPLETED) { // generate stop may failed. this is job's success, not step's success.
+				if (je1.getExecutionContext().containsKey(NutchTasklets.Constants.GENERATE_NO_NEW_ITEM)) { // no new item. break loop.
+					break;
+				} else { // other reasons cause step failed.
+					if (je1.getExecutionContext().containsKey(NutchTasklets.Constants.GENERATE_OK)) { // has new item and has completed successfully.
+						noOp();
+					} else {
+						retries++;
+					}
+				}
+			} else { // failed in other steps. continue
+				retries++;
+			}
+			
+			if (retries > maxRetries) {
+				break;
+			}
+		}
 		// Because had not called addTimeStamp(), and batchId is the same, So success steps will not get executed again. 
 		assertTrue("status should be compeleted", je1.getStatus() == BatchStatus.COMPLETED);
+	}
+	
+	private void noOp() {
 	}
 }

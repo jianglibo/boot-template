@@ -49,9 +49,11 @@ public class NutchTasklets  extends JobConfigurationBase {
     @StepScope
     public ToolTasklet nutchInjectToolTasklet(@Value("#{jobParameters['crawlId']}") String crawlId
     		,@Value("#{jobParameters['debug']}") long debug
+    		,@Value("#{jobParameters['jobJarUrl']}") String jobJarUrl
     		) throws IOException {
     	ToolTasklet tt = new ToolTasklet();
-    	tt.setJar(fsUtil.localFileAsResource(nutchFolderUtil.getNutchJobJar(crawlId)));
+    	setJar(tt, crawlId, jobJarUrl);
+//    	tt.setJar(fsUtil.localFileAsResource(nutchFolderUtil.getNutchJobJar(crawlId)));
     	tt.setArguments(nutchFolderUtil.getSeedDir(crawlId), "-crawlId", crawlId);
     	tt.setToolClass("org.apache.nutch.crawl.InjectorJob");
     	tt.setConfiguration(nutchFolderUtil.getNutchConfiguration(crawlId));
@@ -132,7 +134,10 @@ public class NutchTasklets  extends JobConfigurationBase {
 			@Override
 			public ExitStatus afterStep(StepExecution stepExecution) {
 				log.info("Step {} got exitCode with: {}", stepExecution.getStepName(), stepExecution.getExitStatus().getExitCode());
-				if (stepExecution.getExitStatus() == ExitStatus.COMPLETED) { // means generated some new items. subsequence step continues.
+				ExecutionContext jobExecutionContext = stepExecution.getJobExecution().getExecutionContext();
+//				ExitStatus.COMPLETED is not a enum type.
+				if (ExitStatus.COMPLETED.getExitCode().equals(stepExecution.getExitStatus().getExitCode())) { // means generated some new items. subsequence step continues.
+					jobExecutionContext.put(Constants.GENERATE_OK, 1L);
 					return null;
 				}
 				String exitDescription = stepExecution.getExitStatus().getExitDescription();
@@ -142,10 +147,11 @@ public class NutchTasklets  extends JobConfigurationBase {
 					if (m.matches()) {
 						if ("1".equals(m.group(1))) {
 							if (forceFetch == 1) {
-								ExecutionContext jobExecutionContext = stepExecution.getJobExecution().getExecutionContext();
 								if (jobExecutionContext.getLong(Constants.FORCE_FETCHED, 0L) == 0L ) { //when forceFetched is not set, try to force continue. But try only once. 
 									jobExecutionContext.put(Constants.FORCE_FETCHED, 1L);
 									return new ExitStatus(NutchTasklets.Constants.FORCE_FETCH);
+								} else {
+									jobExecutionContext.put(Constants.GENERATE_NO_NEW_ITEM, 1L);
 								}
 							}
 						}
@@ -156,11 +162,14 @@ public class NutchTasklets  extends JobConfigurationBase {
     }
     
     private void setJar(ToolTasklet tt,String crawlId, String jobJarUrl) throws IOException {
-    	if (jobJarUrl == null || jobJarUrl.trim().isEmpty()) {
-    		tt.setJar(fsUtil.localFileAsResource(nutchFolderUtil.getNutchJobJar(crawlId)));
-    	} else {
-    		tt.setJar(applicationcontext.getResource(jobJarUrl));
-    	}
+//    	if (jobJarUrl == null || jobJarUrl.trim().isEmpty()) {
+//    		tt.setJar(fsUtil.localFileAsResource(nutchFolderUtil.getNutchJobJar(crawlId)));
+//    	} else {
+//    		tt.setJar(applicationcontext.getResource(jobJarUrl));
+//    	}
+    	
+    	// always use local jobjar.
+    	tt.setJar(fsUtil.localFileAsResource(nutchFolderUtil.getNutchJobJar(crawlId)));
     }
     
     
@@ -258,6 +267,8 @@ public class NutchTasklets  extends JobConfigurationBase {
     
     public static class Constants {
     	public static final String FORCE_FETCH = "forceFetch";
+    	public static final String GENERATE_NO_NEW_ITEM = "generateNoNewItem";
+    	public static final String GENERATE_OK = "generateOk";
     	public static final String FORCE_FETCHED = "forceFetched";
     	public static final String REMOTE_JOB_JAR = "remoteJobJar";
     	public static final String JOB_DEBUG = "debug";

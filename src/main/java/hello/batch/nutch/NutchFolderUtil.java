@@ -11,6 +11,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -54,6 +56,8 @@ public class NutchFolderUtil {
 	
 	@Autowired
 	private org.apache.hadoop.conf.Configuration configuration;
+	
+	private static final ConcurrentMap<String, String> remoteUploads = new ConcurrentHashMap<>();
 	
 	@Autowired
 	private FileSystem fs;
@@ -142,12 +146,17 @@ public class NutchFolderUtil {
 	}
 	
 	public String copyJobJar(String crawlId) throws IOException {
+		if (remoteUploads.containsKey(crawlId)) {
+			return remoteUploads.get(crawlId);
+		}
 		Path rp = new Path(baseFolder, crawlId);
 		fs.mkdirs(rp);
 		java.nio.file.Path localPath = Paths.get(localBaseFolder, crawlId);
 		File file = Stream.of(localPath.toFile().listFiles()).filter(File::isFile).filter(f-> f.getName().matches(".*\\.job$")).findAny().get();
 		fsUtil.copyFromLocalFile(rp.toString(), file.getAbsolutePath());
-		return fsUtil.convertToFullUserPath(fsUtil.getRemoteFileURIString(rp.toString(),file.getName()));
+		String s = fsUtil.convertToFullUserPath(fsUtil.getRemoteFileURIString(rp.toString(),file.getName()));
+		remoteUploads.put(crawlId, s);
+		return s;
 	}
 	
 	

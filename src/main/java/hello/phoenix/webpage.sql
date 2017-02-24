@@ -1,11 +1,11 @@
 CREATE VIEW IF NOT EXISTS "nutch_webpage"
 (
   "f.bas" VARCHAR primary key
-  ,"f.st" VARCHAR
-  ,"f.pts" VARCHAR
-  ,"f.ts" VARCHAR
-  ,"f.fi" VARCHAR
-  ,"f.rsf" VARCHAR
+  ,"f.st" INTEGER
+  ,"f.pts" BIGINT
+  ,"f.ts" BIGINT
+  ,"f.fi" INTEGER
+  ,"f.rsf" INTEGER
   ,"f.rpr" VARCHAR
   ,"f.cnt" VARCHAR
   ,"f.typ" VARCHAR

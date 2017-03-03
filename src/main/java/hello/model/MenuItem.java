@@ -1,10 +1,9 @@
 package hello.model;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
-import org.assertj.core.util.Sets;
-import org.assertj.core.util.Strings;
 import org.springframework.security.core.GrantedAuthority;
 
 public class MenuItem {
@@ -19,7 +18,7 @@ public class MenuItem {
 	
 	private ShowMenuWhen showWhen = ShowMenuWhen.ALWAYS;
 	
-	private Set<String> roles = Sets.newHashSet();
+	private Set<String> roles = new HashSet<>();
 	
 	private String domId;
 	
@@ -65,7 +64,8 @@ public class MenuItem {
 	}
 	
 	public void addExtraClass(String cn) {
-		if (Strings.isNullOrEmpty(getExtraClasses())) {
+		String ec = getExtraClasses();
+		if (ec == null || ec.isEmpty()) {
 			setExtraClasses(cn);
 		} else {
 			setExtraClasses(getExtraClasses() + " " + cn);

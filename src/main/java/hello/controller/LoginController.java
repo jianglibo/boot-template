@@ -1,5 +1,6 @@
 package hello.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +22,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.google.common.collect.Lists;
 
 import hello.domain.LoginAttempt;
 import hello.domain.ThirdPartLogin.Provider;
@@ -122,7 +121,9 @@ public class LoginController implements HasMenuItemController {
 	public List<MenuItem> getMenuItems() {
 		MenuItem logout = new MenuItem("logout", "/logout", "menu-item-divide", ShowMenuWhen.LOGINED);
 		logout.setDomId("logoutMenuItem");
-		return Lists.newArrayList(new MenuItem("login","/login", "menu-item-divide", ShowMenuWhen.NOT_LOGIN),
-				logout);
+		List<MenuItem> mis = new ArrayList<>();
+		mis.add(new MenuItem("login","/login", "menu-item-divide", ShowMenuWhen.NOT_LOGIN));
+		mis.add(logout);
+		return mis;
 	}
 }

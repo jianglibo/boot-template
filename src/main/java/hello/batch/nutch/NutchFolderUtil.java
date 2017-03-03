@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -27,8 +28,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-
-import com.beust.jcommander.internal.Maps;
 
 import hello.util.FsUtil;
 
@@ -186,7 +185,7 @@ public class NutchFolderUtil {
 	
 	
 	public class CrawJobParameterBuilder {
-		Map<String, JobParameter> jpmap = Maps.newHashMap();
+		Map<String, JobParameter> jpmap = new HashMap<>();
 		
 		public CommonJobParameterBuilder withCommonJobParameterBuilder() {
 			return new CommonJobParameterBuilder(this);

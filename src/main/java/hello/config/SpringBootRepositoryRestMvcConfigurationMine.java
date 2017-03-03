@@ -11,8 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.webmvc.config.ResourceMetadataHandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 
-import com.google.common.collect.Lists;
-
 /**
  * @author jianglibo@gmail.com
  *         2015年9月28日

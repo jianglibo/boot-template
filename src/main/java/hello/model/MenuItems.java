@@ -1,12 +1,12 @@
 package hello.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.assertj.core.util.Lists;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -18,7 +18,7 @@ import hello.util.SecurityUtil;
 @Component
 public class MenuItems implements ApplicationContextAware {
 	
-	private List<MenuItem> menus = Lists.newArrayList();
+	private List<MenuItem> menus = new ArrayList<>();
 	
 	private ApplicationContext applicationContext;
 	

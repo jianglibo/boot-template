@@ -1,15 +1,12 @@
 package hello.config.userdetail;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.util.Assert;
 
-import com.google.common.collect.Lists;
 
 import hello.vo.BootUserVo;
 
@@ -25,7 +22,7 @@ public class BootUserVoBuilder {
 	private boolean mobileVerified;
 
 	private String password;
-	private List<GrantedAuthority> authorities = Lists.newArrayList();
+	private List<GrantedAuthority> authorities = new ArrayList<>();
 	private boolean accountExpired;
 	private boolean accountLocked;
 	private boolean credentialsExpired;

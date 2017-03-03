@@ -9,13 +9,13 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.hadoop.fs.FSDataInputStream;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.RemoteIterator;
@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import com.beust.jcommander.internal.Maps;
 import com.google.common.io.ByteStreams;
 
 /**
@@ -140,7 +139,7 @@ public class WordCountFolderUtil {
 		}
 		
 		public JobParameters build() {
-			Map<String, JobParameter> jpmap = Maps.newHashMap();
+			Map<String, JobParameter> jpmap = new HashMap<>();
 			jpmap.put("localFolder", localFolder);
 			jpmap.put("jar", jar);
 			jpmap.put("inputFolder", new JobParameter(fsUtil.convertToFullUserPath("wc/in")));

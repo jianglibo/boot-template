@@ -5,13 +5,12 @@
 package hello.vo;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-
-import com.google.common.collect.Sets;
 
 import hello.domain.BootUser;
 import hello.domain.BootUser.Gender;
@@ -45,7 +44,7 @@ public class BootUserVo extends User {
     private final Set<ThirdPartLoginVo> thirdConns;
 
     public BootUserVo() {
-        super("-1", "", Sets.newHashSet());
+        super("-1", "",new HashSet<>());
         this.id = 0;
         this.email = null;
         this.mobile = null;
@@ -55,11 +54,11 @@ public class BootUserVo extends User {
         this.mobileVerified = false;
         this.openId = "";
         this.gender = Gender.FEMALE;
-        this.thirdConns = Sets.newHashSet();
+        this.thirdConns = new HashSet<>();
     }
 
     public BootUserVo(BootUser bu) {
-        this(bu, Sets.newHashSet());
+        this(bu, new HashSet<>());
     }
 
     public BootUserVo(BootUser person, Set<Role> roles) {
@@ -92,13 +91,13 @@ public class BootUserVo extends User {
             boolean credentialNonExpired, boolean accountNonLocked, String avatar, Collection<? extends GrantedAuthority> authorities, boolean emailVerified,
             boolean mobileVerified) {
         this(name, displayName, email, mobile, password, enabled, accountNonExpired, credentialNonExpired, accountNonLocked, avatar, authorities,
-                emailVerified, mobileVerified, Gender.FEMALE, Sets.newHashSet(), 0, null);
+                emailVerified, mobileVerified, Gender.FEMALE, new HashSet<>(), 0, null);
     }
 
     public BootUserVo(String name, String displayName, String email, String mobile, String password, boolean enabled, boolean accountNonExpired,
             boolean credentialNonExpired, boolean accountNonLocked, String avatar, Collection<GrantedAuthority> authorities) {
         this(name, displayName, email, mobile, password, enabled, accountNonExpired, credentialNonExpired, accountNonLocked, avatar, authorities, false, false,
-                Gender.FEMALE, Sets.newHashSet(), 0, null);
+                Gender.FEMALE, new HashSet<>(), 0, null);
     }
 
     public BootUserVo(String name, String displayName, String email, String mobile, String password, String avatar, Collection<GrantedAuthority> authorities) {
@@ -106,7 +105,7 @@ public class BootUserVo extends User {
     }
 
     public BootUserVo(String name, String email, String mobile, String password) {
-        this(name, name, email, mobile, password, true, true, true, true, null, Sets.newHashSet());
+        this(name, name, email, mobile, password, true, true, true, true, null, new HashSet<>());
     }
 
     public boolean isEmailVerified() {

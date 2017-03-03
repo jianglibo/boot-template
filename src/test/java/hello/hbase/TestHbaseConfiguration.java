@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -42,7 +43,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.hadoop.hbase.HbaseTemplate;
 import org.springframework.data.hadoop.hbase.RowMapper;
 
-import com.beust.jcommander.internal.Maps;
 import com.google.common.collect.Lists;
 import com.google.inject.name.Named;
 
@@ -94,7 +94,7 @@ public class TestHbaseConfiguration extends Tbase {
 		Admin admin = ConnectionFactory.createConnection(conf).getAdmin();
 		HTableDescriptor[] tableDescriptor = admin.listTables();
 		List<String> tns = Lists.newArrayList();
-		Map<String, HColumnDescriptor[]> familiesMap = Maps.newHashMap();
+		Map<String, HColumnDescriptor[]> familiesMap = new HashMap<>();
 		
 	    for (int i=0; i<tableDescriptor.length;i++ ){
 	       String tn = tableDescriptor[i].getNameAsString();

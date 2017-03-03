@@ -4,6 +4,9 @@
  */
 package hello.util;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -11,12 +14,9 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 /**
  * @author jianglibo@gmail.com
- *         2015å¹?12æœ?17æ—?
  *
  */
 @Component
@@ -28,10 +28,16 @@ public class CommonJsonFieldExtractor {
 
     public Set<String> patchFields(JsonNode model) {
         JsonNode jn = model.path(PATCH_FIELD);
-        Set<String> ss = Sets.newHashSet();
+        Set<String> ss = new HashSet<>();
         if (!jn.isMissingNode()) {
             if (jn.isArray()) {
-                ss = Lists.newArrayList((ArrayNode) jn).stream()//
+            	List<JsonNode> jns = new ArrayList<>();
+            	ArrayNode an = (ArrayNode) jn;
+            	an.forEach(cjn -> {
+            		jns.add(cjn);
+            	});
+            	
+                ss = jns.stream()//
                         .filter(it -> it.isTextual()) //
                         .map(it -> it.asText())//
                         .collect(Collectors.toSet());

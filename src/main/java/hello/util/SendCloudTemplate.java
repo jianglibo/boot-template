@@ -1,5 +1,7 @@
 package hello.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -8,8 +10,6 @@ import org.apache.http.client.fluent.Form;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public abstract class SendCloudTemplate {
 
@@ -63,7 +63,7 @@ public abstract class SendCloudTemplate {
             kk = "%" + key + "%";
         }
         if (stvs.getSub().get(kk) == null) {
-            stvs.getSub().put(kk, Lists.newArrayList());
+            stvs.getSub().put(kk, new ArrayList<>());
         }
         stvs.getSub().get(kk).add(val);
         return this;
@@ -113,7 +113,7 @@ public abstract class SendCloudTemplate {
 
         private String[] to;
 
-        private Map<String, List<String>> sub = Maps.newHashMap();
+        private Map<String, List<String>> sub = new HashMap<>();
 
         public Map<String, List<String>> getSub() {
             return sub;

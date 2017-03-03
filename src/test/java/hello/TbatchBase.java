@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -36,10 +37,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
-
-import com.beust.jcommander.internal.Maps;
-import com.google.common.base.Strings;
-
 
 public class TbatchBase extends Tbase {
 	
@@ -143,14 +140,14 @@ public class TbatchBase extends Tbase {
 	}
 	
 	protected int countCurrentItemNumberInDb(String tableName) {
-		if (Strings.isNullOrEmpty(tableName)) {
+		if (tableName == null || tableName.trim().isEmpty()) {
 			tableName = "people1";
 		}
 		return jdbcTemplate.queryForObject("select count(*) from " + tableName, Integer.class);
 	}
 	
 	protected void bassertCountTable(String tableName, int expectedCount) {
-		if (Strings.isNullOrEmpty(tableName)) {
+		if (tableName == null || tableName.trim().isEmpty()) {
 			tableName = "people1";
 		}
 		assertThat("count in talbe " + tableName, countCurrentItemNumberInDb(tableName), equalTo(expectedCount));
@@ -162,7 +159,7 @@ public class TbatchBase extends Tbase {
 	}
 	
 	protected void clearDb(String tableName) {
-		if (Strings.isNullOrEmpty(tableName)) {
+		if (tableName == null || tableName.trim().isEmpty()) {
 			tableName = "people1";
 		}
 		int affected = jdbcTemplate.update("delete from " + tableName);
@@ -223,11 +220,11 @@ public class TbatchBase extends Tbase {
 	}
 	
 	public TbatchBase startJobParameters() {
-		map = Maps.newHashMap();
+		map = new HashMap<>();
 		return this;
 	}
 	
-	Map<String, JobParameter> map = Maps.newHashMap();
+	Map<String, JobParameter> map = new HashMap<>();
 	
 	public JobParameters buildJobParameters() {
 		return new JobParameters(map);

@@ -1,5 +1,6 @@
 package hello.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,8 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.google.common.collect.Lists;
 
 import hello.model.MenuItem;
 import hello.model.MenuItems;
@@ -39,6 +38,8 @@ public class HomeController implements HasMenuItemController {
 
 	@Override
 	public List<MenuItem> getMenuItems() {
-		return Lists.newArrayList(new MenuItem("home", "/"));
+		List<MenuItem> mis = new ArrayList<>();
+		mis.add(new MenuItem("home", "/"));
+		return mis;
 	}
 }

@@ -2,6 +2,7 @@ package hello.domain;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,7 +20,6 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.collect.Sets;
 
 import hello.vo.BootUserVo;
 
@@ -45,7 +45,7 @@ public class BootUser extends BaseEntity {
     private Gender gender = Gender.FEMALE;
     
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "bootUser", cascade = CascadeType.REMOVE)
-    private Set<ThirdPartLogin> thirdConns = Sets.newHashSet();
+    private Set<ThirdPartLogin> thirdConns = new HashSet<>();
     
     @NotNull
     @Column(nullable = false)
@@ -73,7 +73,7 @@ public class BootUser extends BaseEntity {
     private String openId;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles = Sets.newHashSet();
+    private Set<Role> roles = new HashSet<>();
 
     public static BootUser newValidPerson() {
         BootUser p = new BootUser();

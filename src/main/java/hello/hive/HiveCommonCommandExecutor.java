@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.hadoop.hive.HiveClient;
 import org.springframework.data.hadoop.hive.HiveClientCallback;
 import org.springframework.data.hadoop.hive.HiveTemplate;
@@ -17,6 +18,7 @@ import com.google.common.io.CharStreams;
 
 
 @Component
+@Profile("hive")
 public class HiveCommonCommandExecutor {
 
 	  private HiveTemplate template;

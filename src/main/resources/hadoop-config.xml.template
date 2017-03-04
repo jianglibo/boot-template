@@ -18,6 +18,7 @@
 	</configuration>
 	
 <!--    	<hdp:hive-client-factory id="hiveClientFactory" hive-data-source-ref="hiveDataSource"/>  -->
+<!--
    	<hive-client-factory id="hiveClientFactory"/>
 	
    	<hive-template/>
@@ -27,5 +28,5 @@
   		<beans:constructor-arg name="driver" ref="hiveDriver"/>
   		<beans:constructor-arg name="url" value="${spring.hive.jdbcUrl}"/>
 	</beans:bean>
-
+-->
 </beans:beans>

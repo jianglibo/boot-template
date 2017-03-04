@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 
 /**
  * @author jianglibo@gmail.com
- *         2015å¹?12æœ?25æ—?
  *
  */
 public class CommonPattern {

@@ -12,6 +12,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.Lists;
+
 import hello.controller.HasMenuItemController;
 import hello.util.SecurityUtil;
 

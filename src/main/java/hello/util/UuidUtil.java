@@ -4,7 +4,7 @@ import java.util.UUID;
 
 /**
  * @author jianglibo@gmail.com
- *         2015å¹?8æœ?12æ—?
+ *         
  *
  */
 public class UuidUtil {

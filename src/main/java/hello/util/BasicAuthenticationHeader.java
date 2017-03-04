@@ -7,7 +7,6 @@ import org.apache.http.message.BasicHeader;
 
 /**
  * @author jianglibo@gmail.com
- *         2015å¹?8æœ?26æ—?
  *
  */
 public class BasicAuthenticationHeader {

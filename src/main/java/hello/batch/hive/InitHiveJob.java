@@ -15,12 +15,14 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import hello.batch.JobConfigurationBase;
 import hello.hive.HiveCommonCommandExecutor;
 import hello.util.FsUtil;
 
 @Configuration
+@Profile("hive")
 public class InitHiveJob extends JobConfigurationBase {
 	
 	

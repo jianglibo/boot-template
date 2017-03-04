@@ -6,6 +6,9 @@ import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
+
 public class MenuItem {
 	
 	private boolean active;

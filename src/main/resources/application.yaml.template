@@ -17,13 +17,11 @@ spring:
         test-on-borrow: true
         max-wait: 10000
     jpa:
-        database: HSQL
         show-sql: true
-        generate-ddl: true
-#        hibernate:
-#            ddl-auto: update
-#            naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-#            dialect: org.hibernate.dialect.H2Dialect
+        hibernate:
+            ddl-auto: update
+            naming:
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     messages:
         basename: messages/shared,messages/children/format,messages/children/validate
         always-use-message-format: false

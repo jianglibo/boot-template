@@ -7,8 +7,6 @@ package hello.repository;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.support.JpaEntityInformation;
-import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
 import hello.domain.Role;
@@ -18,7 +16,7 @@ import hello.domain.Role;
  *         2015年9月28日
  *
  */
-public class RoleRepositoryImpl extends SimpleJpaRepository<Role, Long>{
+public class RoleRepositoryImpl extends SimpleJpaRepository<Role, Long> implements RoleRepositoryCustom {
 
 //	private final JpaEntityInformation<Role, ?> entityInformation;
     

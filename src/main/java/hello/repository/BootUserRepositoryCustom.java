@@ -1,14 +1,4 @@
-/**
- * 2016 jianglibo@gmail.com
- *
- */
 package hello.repository;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-
-import hello.domain.BootUser;
 
 /**
  * @author jianglibo@gmail.com
@@ -16,7 +6,4 @@ import hello.domain.BootUser;
  *
  */
 public interface BootUserRepositoryCustom {
-    <S extends BootUser> S save(S entity);
-
-    Page<BootUser> findAll(Specification<BootUser> spec, Pageable pageable);
 }
